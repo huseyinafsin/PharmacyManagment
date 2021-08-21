@@ -9,13 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Entities;
+using PharmacyManagmentV2.Data;
 using PharmacyManagmentV2.Interfaces;
+using PharmacyManagmentV2.Models;
 using PharmacyManagmentV2.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace PharmacyManagmentV2
 {
@@ -46,20 +45,21 @@ namespace PharmacyManagmentV2
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<AppDBContext>();
 
-            services.ConfigureApplicationCookie(opt =>
-            {
-                opt.Cookie.Name = "CookieSettings";
-                opt.LoginPath = new PathString("/Account/Login");
-                opt.Cookie.HttpOnly = true;
-                opt.Cookie.SameSite = SameSiteMode.Strict;
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            });
+            //services.ConfigureApplicationCookie(opt =>
+            //{
+            //    opt.Cookie.Name = "CookieSettings";
+            //    opt.LoginPath = new PathString("/User/Login");
+            //    opt.Cookie.HttpOnly = true;
+            //    opt.Cookie.SameSite = SameSiteMode.Strict;
+            //    opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            //});
 
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
             opt =>
             {
                 opt.Cookie.Name = "CookieSettings";
-                opt.LoginPath = new PathString("/Account/Login");
+                opt.LoginPath = new PathString("/User/Login");
+                opt.AccessDeniedPath = new PathString("/Admin/AccessDenied");
                 opt.Cookie.HttpOnly = true;
                 opt.Cookie.SameSite = SameSiteMode.Strict;
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
@@ -106,31 +106,7 @@ namespace PharmacyManagmentV2
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Application}/{controller=Customer}/{action=Index}/{id?}");
-
-
-                endpoints.MapControllerRoute(
-                    name: "Login",
-                    pattern: "{controller=Account}/{action=Login}/{id?}");
-
-                 endpoints.MapControllerRoute(
-                    name: "Register",
-                    pattern: "{controller=Account}/{action=Login}/{id?}");
-
-                 endpoints.MapControllerRoute(
-                    name: "application_home",
-                    pattern: "{area=Application}/{controller=Home}/{action=Index}/{id?}");
-
-
-                endpoints.MapControllerRoute(
-                     name: "customer_list",
-                     pattern: "{area=Application}/{controller=Customer}/{action=Index}/{id?}");
-                  
-                endpoints.MapControllerRoute(
-                     name: "manufacturer",
-                     pattern: "{area=Application}/{controller=Manufacturer}/{action=Index}/{id?}");
-
-               
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 
             });
 

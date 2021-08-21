@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PharmacyManagmentV2.Entities;
+using PharmacyManagmentV2.Data;
 
 namespace PharmacyManagmentV2.Interfaces
 {

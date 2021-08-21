@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PharmacyManagmentV2.Entities;
+using PharmacyManagmentV2.Data;
+using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Interfaces
 {
-    public interface ISellRepository: IGenericRepository<Sell>
+    public interface ISellRepository: IGenericRepository<Invoice>
     {
     }
 }

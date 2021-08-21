@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Entities;
 
 namespace PharmacyManagmentV2.Interfaces
 {

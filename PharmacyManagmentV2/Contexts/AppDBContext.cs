@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PharmacyManagmentV2.Models;
-using PharmacyManagmentV2.Entities;
 using PharmacyManagmentV2.Data;
 
 namespace PharmacyManagmentV2.Contexts
@@ -34,7 +33,7 @@ namespace PharmacyManagmentV2.Contexts
         public virtual DbSet<Medicine> Medicines { get; set; }
         public virtual DbSet<MedicineType> MedicineTypes { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
-        public virtual DbSet<Sell> Sells { get; set; }
+        public virtual DbSet<Invoice> Sells { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
      

@@ -1,4 +1,6 @@
-﻿using PharmacyManagmentV2.Entities;
+﻿
+using PharmacyManagmentV2.Data;
+using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Interfaces
 {

@@ -39,7 +39,7 @@ namespace PharmacyManagmentV2.Repositories
         public async Task Update(T obj)
         {
 
-            _context.Update(obj);
+             _context.Update(obj);
         }
 
         public async Task Delete(T obj)
