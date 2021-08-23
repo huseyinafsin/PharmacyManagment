@@ -12,7 +12,7 @@ using PharmacyManagmentV2.Contexts;
 using PharmacyManagmentV2.Data;
 using PharmacyManagmentV2.Interfaces;
 using PharmacyManagmentV2.Models;
-
+//23.08.2021- 15.00
 namespace PharmacyManagmentV2.Controllers
 {
     public class UserController : Controller
