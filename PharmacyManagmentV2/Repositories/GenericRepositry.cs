@@ -14,7 +14,6 @@ namespace PharmacyManagmentV2.Repositories
         public GenericRepository(AppDBContext context)
         {
             _context = context;
-
         }
 
         public IQueryable<T> GetAll()
@@ -28,25 +27,19 @@ namespace PharmacyManagmentV2.Repositories
                     .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-
         public async Task Create(T obj)
         {
             await _context.Set<T>().AddAsync(obj);
         }
 
-
-
         public async Task Update(T obj)
         {
-
              _context.Update(obj);
         }
 
         public async Task Delete(T obj)
         {
-            
             _context.Set<T>().Remove(obj);
-
         }
 
         public async Task SaveChanges()

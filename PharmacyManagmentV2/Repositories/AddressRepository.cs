@@ -17,29 +17,6 @@ namespace PharmacyManagmentV2.Repositories
         {
         }
 
-        public Task Create(Address obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Delete(Address obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(Address obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        IQueryable<Address> IGenericRepository<Address>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Address> IGenericRepository<Address>.GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

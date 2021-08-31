@@ -12,18 +12,22 @@ namespace PharmacyManagmentV2.Data
         public Customer()
         {
             Sells = new HashSet<Invoice>();
+            Notifies = new HashSet<Notify>();
         }
 
       
         public string FirstName { get; set; }
         public string Email { get; set; }
-        public int Balance { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
         public DateTime DateofBird { get; set; }
         public int Phone { get; set; }
         public int? AddressId { get; set; }
         public virtual Address Address { get; set; }
+        public virtual BankAccount BankAccount { get; set; }
+
         public virtual ICollection<Invoice> Sells { get; set; }
+        public virtual ICollection<Notify> Notifies { get; set; }
+
     }
 }

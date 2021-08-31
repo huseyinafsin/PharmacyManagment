@@ -45,14 +45,6 @@ namespace PharmacyManagmentV2
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<AppDBContext>();
 
-            //services.ConfigureApplicationCookie(opt =>
-            //{
-            //    opt.Cookie.Name = "CookieSettings";
-            //    opt.LoginPath = new PathString("/User/Login");
-            //    opt.Cookie.HttpOnly = true;
-            //    opt.Cookie.SameSite = SameSiteMode.Strict;
-            //    opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            //});
 
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
             opt =>

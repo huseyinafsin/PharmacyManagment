@@ -14,17 +14,20 @@ namespace PharmacyManagmentV2.Data
         {
             Purchases = new HashSet<Purchase>();
             Sells = new HashSet<Invoice>();
+            Notifies = new HashSet<Notify>();
             
         }
        
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
+        public override string Email { get; set; }
+        public override  string  PhoneNumber { get; set; }
         public string UserType { get; set; }
+        public virtual Pharmacy? Pharmacy { get; set; }
         public int? AddressId { get; set; }
         public virtual Address Address { get; set; }
         public virtual ICollection<Purchase> Purchases { get; set; }
         public virtual ICollection<Invoice> Sells { get; set; }
+        public virtual ICollection<Notify>? Notifies { get; set; }
     }
 }

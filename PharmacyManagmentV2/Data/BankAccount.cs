@@ -10,6 +10,5 @@ namespace PharmacyManagmentV2.Data
         public int Balance { get; set; }
         public int CreditLine { get; set; }
 
-        public int OwnerId { get; set; }
     }
 }

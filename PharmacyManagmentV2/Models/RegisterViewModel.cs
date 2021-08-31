@@ -17,7 +17,7 @@ namespace PharmacyManagmentV2.Models
 
         
         [Required]
-       [EmailAddress]
+        [EmailAddress]
         public string Email { get; set; }
 
         [MaxLength(11)]
@@ -34,6 +34,9 @@ namespace PharmacyManagmentV2.Models
         
         [Required]
         public string UserType { get; set; }
+
+        
+        public Pharmacy Pharmacy { get; set; }
 
         public Address Address { get; set; }
 

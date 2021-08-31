@@ -1,4 +1,4 @@
-﻿@model PharmacyManagmentV2.Models.RegisterViewModel
+﻿@model PharmacyManagmentV2.Models.UserViewModel
 @{
     ViewData["Title"] = "Edit User";
     Layout = "Layout";
@@ -35,24 +35,6 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <select asp-for="UserType" class="form-control">
-                <option value="">Select a User Type</option>
-                <option value="1">Administor</option>
-                <option value="2">Employee</option>
-                <option value="3">Advisor</option>
-            </select>
 
             <div class="form-group">
                 <label asp-for="Address.City"></label>

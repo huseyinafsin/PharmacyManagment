@@ -40,7 +40,7 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: Application/Customer/Details/5
-        [HttpPost]
+        [HttpGet]
         [ActionName("Details")]
         [Authorize(Roles ="Customer Details")]
         public async Task<IActionResult> Details(int? id)

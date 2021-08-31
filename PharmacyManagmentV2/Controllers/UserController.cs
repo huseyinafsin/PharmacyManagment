@@ -88,6 +88,8 @@ namespace PharmacyManagmentV2.Controllers
         [ActionName("Register")]
         public IActionResult Register(string returnUrl = null)
         {
+            ViewBag.pharmacies = _context.Pharmacies.ToList();
+
             return View();
         }
 
@@ -106,12 +108,11 @@ namespace PharmacyManagmentV2.Controllers
                     FirstName = model.Firtname,
                     LastName = model.LastName,
                     Email = model.Email,
-                    UserName=model.Email,
+                    UserName = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserType = model.UserType,
-                    Address = model.Address
+                    Address = model.Address,
                 };
-               
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -158,6 +159,8 @@ namespace PharmacyManagmentV2.Controllers
                 }
 
             }
+
+            ViewBag.pharmacies = _context.Pharmacies.ToList();
             return View(model);
 
         }
@@ -208,13 +211,12 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
             
-            var model = new RegisterViewModel()
+            var model = new UserViewModel()
             {
                 Firtname =user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                UserType = user.UserType,
                 Address = _address.GetAll().FirstOrDefault(p=>p.Id==user.AddressId)
             };
             
@@ -226,15 +228,84 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(int id, RegisterViewModel model)
+        public async Task<IActionResult> EditUser(int id, UserViewModel model)
         {
           
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _address.Update(model.Address);
-                    _context.Update(model);
+                    var user = await _context.ApplicationUsers.FindAsync(id);
+                    user.FirstName  = model.Firtname;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Address = model.Address;
+                    await _userManager.UpdateAsync(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicationUserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+            
+        // GET: Application/User/Profile/5
+        [Authorize(Roles = "Profile")]
+        public async Task<IActionResult> Profile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.ApplicationUsers.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            var model = new UserViewModel()
+            {
+                Firtname =user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Address = _address.GetAll().FirstOrDefault(p=>p.Id==user.AddressId)
+            };
+            
+            return View(model);
+        }
+
+        // POST: Application/User/Profile/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(int id, UserViewModel model)
+        {
+          
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await _context.ApplicationUsers.FindAsync(id);
+                    user.FirstName = model.Firtname;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.Address = model.Address;
+                    await _userManager.UpdateAsync(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

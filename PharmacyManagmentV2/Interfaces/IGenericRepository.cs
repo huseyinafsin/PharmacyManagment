@@ -17,9 +17,6 @@ namespace PharmacyManagmentV2.Interfaces
 
         Task Delete(T obj);
         Task SaveChanges();
-        
-
-
 
     }
 }

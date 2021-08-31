@@ -21,8 +21,7 @@ namespace PharmacyManagmentV2.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-
+           
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
@@ -36,8 +35,6 @@ namespace PharmacyManagmentV2.Contexts
         public virtual DbSet<Invoice> Sells { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-     
-
-
+        public virtual DbSet<Pharmacy> Pharmacies { get; set; }
     }
 }

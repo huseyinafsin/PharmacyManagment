@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PharmacyManagmentV2.Controllers
 {
-    [Authorize(Roles ="Home Page")]
+   [Authorize(Roles ="Home Page")]
     public class HomeController : Controller
     {
         private readonly ILogger logger;
