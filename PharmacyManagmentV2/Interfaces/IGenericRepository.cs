@@ -8,7 +8,7 @@ using PharmacyManagmentV2.Data;
 
 namespace PharmacyManagmentV2.Interfaces
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         IQueryable<T> GetAll();
         Task<T> GetById(int id);

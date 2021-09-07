@@ -46,7 +46,7 @@
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            
+         
             <div class="form-group">
                 <label asp-for="UserType"></label>
                 <select asp-for="UserType" class="form-control">
@@ -56,12 +56,6 @@
                     <option value="Advisor">Advisor</option>
                 </select>
             </div>
-
-            @*<div class="form-group">
-                <label asp-for="Pharmacy.Name">Pharmacy</label>
-                @Html.DropDownListFor(x => x.Pharmacy.Id, new SelectList(ViewBag.Pharmacies, "Id", "Name"), new { @class = "form-control" })
-
-            </div>*@
 
             <div class="form-group">
                 <label asp-for="Address.City"></label>

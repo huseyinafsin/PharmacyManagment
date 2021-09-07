@@ -10,8 +10,8 @@ using PharmacyManagmentV2.Contexts;
 namespace PharmacyManagmentV2.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210827103934_Init")]
-    partial class Init
+    [Migration("20210907072119_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,51 @@ namespace PharmacyManagmentV2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ApplicationUserPharmacy", b =>
+                {
+                    b.Property<int>("ApplicationUsersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PharmaciesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationUsersId", "PharmaciesId");
+
+                    b.HasIndex("PharmaciesId");
+
+                    b.ToTable("ApplicationUserPharmacy");
+                });
+
+            modelBuilder.Entity("BankAccountPharmacy", b =>
+                {
+                    b.Property<int>("BankAccountsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PharmaciesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BankAccountsId", "PharmaciesId");
+
+                    b.HasIndex("PharmaciesId");
+
+                    b.ToTable("BankAccountPharmacy");
+                });
+
+            modelBuilder.Entity("MedicinePharmacy", b =>
+                {
+                    b.Property<int>("MedicinesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PharmaciesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedicinesId", "PharmaciesId");
+
+                    b.HasIndex("PharmaciesId");
+
+                    b.ToTable("MedicinePharmacy");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -198,6 +243,9 @@ namespace PharmacyManagmentV2.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreatAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -227,9 +275,6 @@ namespace PharmacyManagmentV2.Migrations
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PharmacyId")
-                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -262,9 +307,32 @@ namespace PharmacyManagmentV2.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("PharmacyManagmentV2.Data.ApplicationUserPharmacy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PharmacyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("PharmacyId");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("ApplicationUserPharmacies");
                 });
 
             modelBuilder.Entity("PharmacyManagmentV2.Data.BankAccount", b =>
@@ -274,8 +342,17 @@ namespace PharmacyManagmentV2.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AccountName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("AccountNumber")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Balance")
                         .HasColumnType("int");
+
+                    b.Property<string>("Branch")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatAt")
                         .HasColumnType("datetime2");
@@ -283,12 +360,7 @@ namespace PharmacyManagmentV2.Migrations
                     b.Property<int>("CreditLine")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PharmacyId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PharmacyId");
 
                     b.ToTable("BankAccount");
                 });
@@ -456,8 +528,8 @@ namespace PharmacyManagmentV2.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Expriy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Expriy")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("GenericName")
                         .HasColumnType("nvarchar(max)");
@@ -477,7 +549,7 @@ namespace PharmacyManagmentV2.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("PurchaseId")
+                    b.Property<int?>("PurchaseId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SellId")
@@ -639,6 +711,51 @@ namespace PharmacyManagmentV2.Migrations
                     b.ToTable("Units");
                 });
 
+            modelBuilder.Entity("ApplicationUserPharmacy", b =>
+                {
+                    b.HasOne("PharmacyManagmentV2.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", null)
+                        .WithMany()
+                        .HasForeignKey("PharmaciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BankAccountPharmacy", b =>
+                {
+                    b.HasOne("PharmacyManagmentV2.Data.BankAccount", null)
+                        .WithMany()
+                        .HasForeignKey("BankAccountsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", null)
+                        .WithMany()
+                        .HasForeignKey("PharmaciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MedicinePharmacy", b =>
+                {
+                    b.HasOne("PharmacyManagmentV2.Data.Medicine", null)
+                        .WithMany()
+                        .HasForeignKey("MedicinesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", null)
+                        .WithMany()
+                        .HasForeignKey("PharmaciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("PharmacyManagmentV2.Data.ApplicationRole", null)
@@ -696,20 +813,26 @@ namespace PharmacyManagmentV2.Migrations
                         .WithMany("AspNetUsers")
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", "Pharmacy")
-                        .WithMany("ApplicationUsers")
-                        .HasForeignKey("PharmacyId");
-
                     b.Navigation("Address");
-
-                    b.Navigation("Pharmacy");
                 });
 
-            modelBuilder.Entity("PharmacyManagmentV2.Data.BankAccount", b =>
+            modelBuilder.Entity("PharmacyManagmentV2.Data.ApplicationUserPharmacy", b =>
                 {
-                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", null)
-                        .WithMany("BankAccounts")
-                        .HasForeignKey("PharmacyId");
+                    b.HasOne("PharmacyManagmentV2.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PharmacyManagmentV2.Data.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Pharmacy");
                 });
 
             modelBuilder.Entity("PharmacyManagmentV2.Data.Customer", b =>
@@ -783,9 +906,7 @@ namespace PharmacyManagmentV2.Migrations
 
                     b.HasOne("PharmacyManagmentV2.Data.Purchase", "Purchase")
                         .WithMany("Medicines")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PurchaseId");
 
                     b.HasOne("PharmacyManagmentV2.Data.Invoice", "Sell")
                         .WithMany("Medicines")
@@ -892,13 +1013,6 @@ namespace PharmacyManagmentV2.Migrations
             modelBuilder.Entity("PharmacyManagmentV2.Data.MedicineType", b =>
                 {
                     b.Navigation("Medicines");
-                });
-
-            modelBuilder.Entity("PharmacyManagmentV2.Data.Pharmacy", b =>
-                {
-                    b.Navigation("ApplicationUsers");
-
-                    b.Navigation("BankAccounts");
                 });
 
             modelBuilder.Entity("PharmacyManagmentV2.Data.Purchase", b =>

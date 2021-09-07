@@ -66,10 +66,9 @@ namespace PharmacyManagmentV2
             services.AddScoped<IMedicineTypeRepository, MedicineTypeRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<ISellRepository, SellRepository>();
-            services.AddScoped<IUnitRepository, UnitRepository>();
-           
+            services.AddScoped<IPharmacyRepository, PharmacyRepository>();
+            services.AddScoped<IApplicationUserPharmacyRepository, ApplicationUserPharmacyRepository>();
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository <>));
-         
 
         }
 

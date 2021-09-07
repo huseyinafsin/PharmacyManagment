@@ -9,7 +9,7 @@ using PharmacyManagmentV2.Data;
 
 namespace PharmacyManagmentV2.Contexts
 {
-    public class AppDBContext : IdentityDbContext<ApplicationUser,ApplicationRole,int>
+    public class AppDBContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
         private readonly DbContextOptions _options;
 
@@ -17,11 +17,15 @@ namespace PharmacyManagmentV2.Contexts
         {
             _options = options;
         }
+        public AppDBContext()
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-           
+
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
@@ -36,5 +40,7 @@ namespace PharmacyManagmentV2.Contexts
         public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<Pharmacy> Pharmacies { get; set; }
+        public DbSet<BankAccount> BankAccount { get; set; }
+        public DbSet<ApplicationUserPharmacy> ApplicationUserPharmacies { get; set; }
     }
 }

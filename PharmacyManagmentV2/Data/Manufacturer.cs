@@ -13,8 +13,6 @@ namespace PharmacyManagmentV2.Data
             Medicines = new HashSet<Medicine>();
             Notifies = new HashSet<Notify>();
         }
-
-      
         public string Name { get; set; }
         public string Email { get; set; }
         public int? AddressId { get; set; }

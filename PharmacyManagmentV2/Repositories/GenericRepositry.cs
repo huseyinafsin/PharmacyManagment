@@ -9,7 +9,7 @@ namespace PharmacyManagmentV2.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        internal AppDBContext _context;
+        private readonly AppDBContext _context;
       
         public GenericRepository(AppDBContext context)
         {
@@ -34,7 +34,7 @@ namespace PharmacyManagmentV2.Repositories
 
         public async Task Update(T obj)
         {
-             _context.Update(obj);
+            _context.Update(obj);
         }
 
         public async Task Delete(T obj)

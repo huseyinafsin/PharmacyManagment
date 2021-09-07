@@ -1,3 +1,4 @@
+use PharmacyManagment;
 SET IDENTITY_INSERT [dbo].[AspNetRoles] ON
 INSERT INTO [dbo].[AspNetRoles] ([Id], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (1, N'Home Page', N'HOME PAGE', NULL)
 INSERT INTO [dbo].[AspNetRoles] ([Id], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (2, N'User Roles', N'USER ROLES', NULL)

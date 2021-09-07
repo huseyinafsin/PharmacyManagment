@@ -84,11 +84,10 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Register")]
+       // [Authorize(Roles ="Register")]
         [ActionName("Register")]
         public IActionResult Register(string returnUrl = null)
         {
-            ViewBag.pharmacies = _context.Pharmacies.ToList();
 
             return View();
         }
@@ -101,7 +100,7 @@ namespace PharmacyManagmentV2.Controllers
 
             if (ModelState.IsValid)
             {
-
+               
                 await _address.Create(model.Address);
                 var user = new ApplicationUser
                 {
@@ -150,6 +149,7 @@ namespace PharmacyManagmentV2.Controllers
                         await _userManager.AddToRoleAsync(user, role.Name);
                     }
 
+
                     return LocalRedirect(returnUrl);
 
                 }
@@ -160,7 +160,6 @@ namespace PharmacyManagmentV2.Controllers
 
             }
 
-            ViewBag.pharmacies = _context.Pharmacies.ToList();
             return View(model);
 
         }

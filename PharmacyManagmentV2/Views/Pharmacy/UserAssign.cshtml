@@ -1,0 +1,39 @@
+﻿@model List<PharmacyManagmentV2.Models.SetUserViewModel>
+@{
+    ViewData["Title"] = "UserAssign";
+    Layout = "Layout";
+}
+
+<h1>User Assign</h1>
+
+<form asp-action="UserAssign" method="post">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                </th>
+                <th>
+                    User
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td><input type="checkbox" asp-for="@Model[i].HasAssign" /> </td>
+                    <td>
+                        @Model[i].FirstName @Model[i].LastName
+                        <input type="hidden" asp-for="@Model[i].UserId" />
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2">
+                    <button>Assign</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

@@ -1,22 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacyManagmentV2.Contexts;
 using PharmacyManagmentV2.Data;
+using PharmacyManagmentV2.Interfaces;
+using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class PharmacyController : Controller
     {
         private readonly AppDBContext _context;
+        private readonly IPharmacyRepository _pharmacyRepositry;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PharmacyController(AppDBContext context)
+        public PharmacyController(AppDBContext context,
+            UserManager<ApplicationUser> userManager,
+            IPharmacyRepository pharmacyRepositry)
+
         {
             _context = context;
+            _userManager = userManager;
+            _pharmacyRepositry = pharmacyRepositry;
         }
 
         // GET: Pharmacy
@@ -144,6 +153,56 @@ namespace PharmacyManagmentV2.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Pharmacy/Users/id
+        //[Authorize(Roles ="User Assign")]
+        [HttpGet]
+        public IActionResult UserAssign(int id)
+        {
+            var allUsers = _userManager.Users.ToList();
+            var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I=>I.Id);
+            var assignUsers = new List<SetUserViewModel>();
+
+            allUsers.ForEach(user => assignUsers.Add(new SetUserViewModel
+            {
+                HasAssign = pharmacyUsers.Contains(user.Id),
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            }));
+
+            
+            return View(assignUsers);
+        }
+
+        [HttpPost]
+        public IActionResult UserAssign(int id, List<SetUserViewModel> list) {
+           
+            foreach (var item in list)
+            {   
+                if (item.HasAssign)
+                {
+
+                    _pharmacyRepositry.AssignUser(id, item.UserId);
+                }
+                else
+                {
+                    _pharmacyRepositry.RemoveUser(id, item.UserId);
+                   
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        //GET: Pharmacy/Users/id
+        [HttpGet]
+        public IActionResult UserList()
+        {
+            return View();
+        }
+
+
 
         private bool PharmacyExists(int id)
         {

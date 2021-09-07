@@ -22,7 +22,14 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Medicine
         public async Task<IActionResult> Index()
         {
-            var appDBContext = _context.Medicines.Include(m => m.Category).Include(m => m.Leaf).Include(m => m.Manufacturer).Include(m => m.Purchase).Include(m => m.Sell).Include(m => m.Type).Include(m => m.Unit);
+            var appDBContext = _context.Medicines
+                .Include(m => m.Category)
+                .Include(m => m.Leaf)
+                .Include(m => m.Manufacturer)
+                .Include(m => m.Purchase)
+                .Include(m => m.Sell)
+                .Include(m => m.Type)
+                .Include(m => m.Unit);
             return View(await appDBContext.ToListAsync());
         }
 
@@ -54,11 +61,13 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Medicine/Create
         public IActionResult Create()
         {
-            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["Leaf"] = new SelectList(_context.Leaves, "Id", "LeafType");
-            ViewData["Manufacturer"] = new SelectList(_context.Manufacturers, "Id", "Name");
-            ViewData["Type"] = new SelectList(_context.MedicineTypes, "Id", "Name");
-            ViewData["Unit"] = new SelectList(_context.Units, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["LeafId"] = new SelectList(_context.Leaves, "Id", "LeafType");
+            ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "Id", "Name");
+            ViewData["PurchaseId"] = new SelectList(_context.Purchases, "Id", "Name");
+            ViewData["SellId"] = new SelectList(_context.Sells, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_context.MedicineTypes, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_context.Units, "Id", "Name");
             return View();
         }
 
@@ -75,11 +84,13 @@ namespace PharmacyManagmentV2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["Leaf"] = new SelectList(_context.Leaves, "Id", "LeafType");
-            ViewData["Manufacturer"] = new SelectList(_context.Manufacturers, "Id", "Name");
-            ViewData["Type"] = new SelectList(_context.MedicineTypes, "Id", "Name");
-            ViewData["Unit"] = new SelectList(_context.Units, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", medicine.CategoryId);
+            ViewData["LeafId"] = new SelectList(_context.Leaves, "Id", "LeafType", medicine.LeafId);
+            ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "Id", "Name", medicine.ManufacturerId);
+            ViewData["PurchaseId"] = new SelectList(_context.Purchases, "Id", "Name", medicine.PurchaseId);
+            ViewData["SellId"] = new SelectList(_context.Sells, "Id", "Id", medicine.SellId);
+            ViewData["TypeId"] = new SelectList(_context.MedicineTypes, "Id", "Name", medicine.TypeId);
+            ViewData["UnitId"] = new SelectList(_context.Units, "Id", "Name", medicine.UnitId);
             return View(medicine);
         }
 

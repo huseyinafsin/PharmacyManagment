@@ -8,7 +8,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-default" style="background-color:forestgreen" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -16,27 +16,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GenericName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Shelf)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ManufacturerPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Strengh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Details)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Expriy)
             </th>
@@ -55,15 +39,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Unit)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Purchase)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sell)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatAt)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -74,25 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GenericName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Shelf)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManufacturerPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Strengh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Details)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Expriy)
@@ -113,18 +70,9 @@
                 @Html.DisplayFor(modelItem => item.Unit.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Purchase.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sell.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-default" style="background-color:yellow" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                <a class="btn btn-default" style="background-color:blue" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

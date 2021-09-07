@@ -32,13 +32,13 @@ namespace PharmacyManagmentV2.Controllers
 
         // GET: RoleAssign
         [Authorize(Roles = "User Roles")]
-        public async Task<IActionResult> UserRoles()
+        public IActionResult UserRoles()
         {
-           return View( _context.ApplicationUsers.ToList() );
+            return View(_context.ApplicationUsers.ToList());
         }
 
         // GET: Admin/RoleAssign/5
-       [Authorize(Roles = "Role Assign")]
+        //[Authorize(Roles = "Role Assign")]
         public async Task<IActionResult> RoleAssign(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
@@ -71,7 +71,7 @@ namespace PharmacyManagmentV2.Controllers
 
         //GET:Admin/AccessDenied
         [HttpGet]
-        public async Task<IActionResult> AccessDenied()
+        public IActionResult AccessDenied()
         {
 
             return View();

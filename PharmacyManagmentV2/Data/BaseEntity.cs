@@ -13,7 +13,7 @@ namespace PharmacyManagmentV2.Data
     {
         [Key]
         public int Id { get; set; }
-        
+
         public DateTime? CreatAt { get; set; } = DateTime.Now;
     }
 }

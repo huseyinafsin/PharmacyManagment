@@ -35,8 +35,6 @@ namespace PharmacyManagmentV2.Models
         [Required]
         public string UserType { get; set; }
 
-        
-        public Pharmacy Pharmacy { get; set; }
 
         public Address Address { get; set; }
 
