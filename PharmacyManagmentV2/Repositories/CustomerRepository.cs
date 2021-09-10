@@ -12,8 +12,15 @@ namespace PharmacyManagmentV2.Repositories
 {
     public class CustomerRepository : GenericRepository<Customer>, ICustomerRepository
     {
+        private readonly AppDBContext _context;
         public CustomerRepository(AppDBContext context) : base(context)
         {
+            _context = context;
+        }
+
+        public List<Customer> GetCustomers()
+        {
+             return  _context.Customers.Include(b => b.BankAccount).ToList();
         }
     }
 }

@@ -12,8 +12,17 @@ namespace PharmacyManagmentV2.Repositories
 {
     public class PurchaseRepository : GenericRepository<Purchase>, IPurchaseRepository
     {
-        public PurchaseRepository(AppDBContext context) : base(context)
+        private readonly AppDBContext _context;
+             public PurchaseRepository(AppDBContext context) : base(context)
         {
+            _context = context;
+        }
+
+       
+
+        public List<Pharmacy> GetPharmacies()
+        {
+            throw new NotImplementedException();
         }
     }
 }

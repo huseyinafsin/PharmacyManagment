@@ -9,5 +9,6 @@ namespace PharmacyManagmentV2.Interfaces
 {
     public interface IManufacturerRepository:IGenericRepository<Manufacturer>
     {
+        List<Manufacturer> GetManufacturers();
     }
 }

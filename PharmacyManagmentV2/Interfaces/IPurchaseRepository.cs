@@ -9,5 +9,7 @@ namespace PharmacyManagmentV2.Interfaces
 {
     public interface IPurchaseRepository :IGenericRepository<Purchase>
     {
+
+       
     }
 }

@@ -41,6 +41,5 @@ namespace PharmacyManagmentV2.Contexts
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<Pharmacy> Pharmacies { get; set; }
         public DbSet<BankAccount> BankAccount { get; set; }
-        public DbSet<ApplicationUserPharmacy> ApplicationUserPharmacies { get; set; }
     }
 }

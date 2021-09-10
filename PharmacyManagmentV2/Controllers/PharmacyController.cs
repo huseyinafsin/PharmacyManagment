@@ -170,28 +170,25 @@ namespace PharmacyManagmentV2.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName
             }));
-
-            
             return View(assignUsers);
         }
 
         [HttpPost]
-        public IActionResult UserAssign(int id, List<SetUserViewModel> list) {
+        public IActionResult UserAssign(int pharmacyId, List<SetUserViewModel> list) {
            
             foreach (var item in list)
             {   
                 if (item.HasAssign)
                 {
 
-                    _pharmacyRepositry.AssignUser(id, item.UserId);
+                    _pharmacyRepositry.AssignUser(pharmacyId, item.UserId);
                 }
                 else
                 {
-                    _pharmacyRepositry.RemoveUser(id, item.UserId);
+                    _pharmacyRepositry.RemoveUser(pharmacyId, item.UserId);
                    
                 }
             }
-
             return RedirectToAction("Index");
         }
 
@@ -201,9 +198,6 @@ namespace PharmacyManagmentV2.Controllers
         {
             return View();
         }
-
-
-
         private bool PharmacyExists(int id)
         {
             return _context.Pharmacies.Any(e => e.Id == id);

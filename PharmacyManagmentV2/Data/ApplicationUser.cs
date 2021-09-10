@@ -16,7 +16,6 @@ namespace PharmacyManagmentV2.Data
             Purchases = new HashSet<Purchase>();
             Sells = new HashSet<Invoice>();
             Notifies = new HashSet<Notify>();
-            Pharmacies = new HashSet<Pharmacy>();
             
         }
        
@@ -27,10 +26,11 @@ namespace PharmacyManagmentV2.Data
         public string UserType { get; set; }
         public int? AddressId { get; set; }
         public virtual Address Address { get; set; }
+        public virtual Pharmacy Pharmacy { get; set; }
+
         public virtual ICollection<Purchase> Purchases { get; set; }
         public virtual ICollection<Invoice> Sells { get; set; }
         public virtual ICollection<Notify> Notifies { get; set; }
-        public virtual ICollection<Pharmacy> Pharmacies { get; set; }
         public DateTime? CreatAt { get; set; } = DateTime.Now;
     }
 }

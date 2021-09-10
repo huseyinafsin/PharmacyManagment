@@ -14,7 +14,6 @@ namespace PharmacyManagmentV2.Data
         {
             Medicines = new HashSet<Medicine>();
         }
-        public int BoxQty { get; set; }
         public int TotalAmount { get; set; }
         public string AppUserId { get; set; }
 
