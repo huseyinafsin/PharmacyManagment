@@ -22,7 +22,7 @@ namespace PharmacyManagmentV2.Controllers
         // GET: BankAccounts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BankAccount.ToListAsync());
+            return View(await _context.BankAccounts.ToListAsync());
         }
 
         // GET: BankAccounts/Details/5
@@ -33,7 +33,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccount
+            var bankAccount = await _context.BankAccounts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (bankAccount == null)
             {
@@ -73,7 +73,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccount.FindAsync(id);
+            var bankAccount = await _context.BankAccounts.FindAsync(id);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccount
+            var bankAccount = await _context.BankAccounts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (bankAccount == null)
             {
@@ -139,15 +139,15 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bankAccount = await _context.BankAccount.FindAsync(id);
-            _context.BankAccount.Remove(bankAccount);
+            var bankAccount = await _context.BankAccounts.FindAsync(id);
+            _context.BankAccounts.Remove(bankAccount);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BankAccountExists(int id)
         {
-            return _context.BankAccount.Any(e => e.Id == id);
+            return _context.BankAccounts.Any(e => e.Id == id);
         }
     }
 }

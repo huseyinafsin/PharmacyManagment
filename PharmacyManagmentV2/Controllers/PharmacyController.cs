@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PharmacyManagmentV2.Contexts;
 using PharmacyManagmentV2.Data;
@@ -16,16 +17,19 @@ namespace PharmacyManagmentV2.Controllers
     {
         private readonly AppDBContext _context;
         private readonly IPharmacyRepository _pharmacyRepositry;
+        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public PharmacyController(AppDBContext context,
             UserManager<ApplicationUser> userManager,
-            IPharmacyRepository pharmacyRepositry)
+            IPharmacyRepository pharmacyRepositry,
+            IBankAccountRepository bankAccountRepository)
 
         {
             _context = context;
             _userManager = userManager;
             _pharmacyRepositry = pharmacyRepositry;
+            _bankAccountRepository = bankAccountRepository;
         }
 
         // GET: Pharmacy
@@ -155,12 +159,11 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: Pharmacy/Users/id
-        //[Authorize(Roles ="User Assign")]
-        [HttpGet]
-        public IActionResult UserAssign(int id)
+        // [Authorize(Roles ="User Assign")]
+        public async Task<IActionResult> UserAssign(int id)
         {
             var allUsers = _userManager.Users.ToList();
-            var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I=>I.Id);
+            var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I => I.Id);
             var assignUsers = new List<SetUserViewModel>();
 
             allUsers.ForEach(user => assignUsers.Add(new SetUserViewModel
@@ -174,19 +177,20 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         [HttpPost]
-        public IActionResult UserAssign(int pharmacyId, List<SetUserViewModel> list) {
-           
+        public async Task<IActionResult> UserAssign(int id, List<SetUserViewModel> list)
+        {
+
             foreach (var item in list)
-            {   
+            {
                 if (item.HasAssign)
                 {
 
-                    _pharmacyRepositry.AssignUser(pharmacyId, item.UserId);
+                    _pharmacyRepositry.AssignUser(id, item.UserId);
                 }
                 else
                 {
-                    _pharmacyRepositry.RemoveUser(pharmacyId, item.UserId);
-                   
+                    _pharmacyRepositry.RemoveUser(id, item.UserId);
+
                 }
             }
             return RedirectToAction("Index");
@@ -197,6 +201,24 @@ namespace PharmacyManagmentV2.Controllers
         public IActionResult UserList()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult SetBankAccount()
+        {
+            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts, "Id", "AccountName");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SetBankAccount(int id, BankAccount model)
+        {
+            var pharmacy = _context.Pharmacies.Include(p => p.BankAccount).FirstOrDefault(p => p.Id == id);
+            pharmacy.BankAccount = _context.BankAccounts.Find(model.Id);
+            _context.Pharmacies.Update(pharmacy);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
         private bool PharmacyExists(int id)
         {

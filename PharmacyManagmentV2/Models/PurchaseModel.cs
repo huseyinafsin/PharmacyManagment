@@ -12,7 +12,6 @@ namespace PharmacyManagmentV2.Models
         public ApplicationUser ApplicationUser { get; set; }
         public DateTime CreatAt { get; set; }
         public int TotalAmount { get; set; }
-        public List<Manufacturer> Manufacturers { get; set; }
         public BankAccount BankAccount { get; set; }
         public List<ProductModel> Products { get; set; }
      }

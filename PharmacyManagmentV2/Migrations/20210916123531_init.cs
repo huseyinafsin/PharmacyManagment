@@ -41,7 +41,7 @@ namespace PharmacyManagmentV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankAccount",
+                name: "BankAccounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -55,7 +55,7 @@ namespace PharmacyManagmentV2.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BankAccount", x => x.Id);
+                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,20 +101,6 @@ namespace PharmacyManagmentV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicineTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pharmacies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pharmacies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,9 +165,9 @@ namespace PharmacyManagmentV2.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Customers_BankAccount_BankAccountId",
+                        name: "FK_Customers_BankAccounts_BankAccountId",
                         column: x => x.BankAccountId,
-                        principalTable: "BankAccount",
+                        principalTable: "BankAccounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -209,9 +195,30 @@ namespace PharmacyManagmentV2.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Manufacturers_BankAccount_BankAccountId",
+                        name: "FK_Manufacturers_BankAccounts_BankAccountId",
                         column: x => x.BankAccountId,
-                        principalTable: "BankAccount",
+                        principalTable: "BankAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pharmacies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BankAccountId = table.Column<int>(type: "int", nullable: true),
+                    CreatAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pharmacies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pharmacies_BankAccounts_BankAccountId",
+                        column: x => x.BankAccountId,
+                        principalTable: "BankAccounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -258,30 +265,6 @@ namespace PharmacyManagmentV2.Migrations
                         principalTable: "Pharmacies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BankAccountPharmacy",
-                columns: table => new
-                {
-                    BankAccountsId = table.Column<int>(type: "int", nullable: false),
-                    PharmaciesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankAccountPharmacy", x => new { x.BankAccountsId, x.PharmaciesId });
-                    table.ForeignKey(
-                        name: "FK_BankAccountPharmacy_BankAccount_BankAccountsId",
-                        column: x => x.BankAccountsId,
-                        principalTable: "BankAccount",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BankAccountPharmacy_Pharmacies_PharmaciesId",
-                        column: x => x.PharmaciesId,
-                        principalTable: "Pharmacies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -599,11 +582,6 @@ namespace PharmacyManagmentV2.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BankAccountPharmacy_PharmaciesId",
-                table: "BankAccountPharmacy",
-                column: "PharmaciesId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Customers_AddressId",
                 table: "Customers",
                 column: "AddressId");
@@ -679,6 +657,11 @@ namespace PharmacyManagmentV2.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pharmacies_BankAccountId",
+                table: "Pharmacies",
+                column: "BankAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Purchases_AppUserId1",
                 table: "Purchases",
                 column: "AppUserId1");
@@ -710,9 +693,6 @@ namespace PharmacyManagmentV2.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "BankAccountPharmacy");
 
             migrationBuilder.DropTable(
                 name: "MedicinePharmacy");
@@ -760,7 +740,7 @@ namespace PharmacyManagmentV2.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "BankAccount");
+                name: "BankAccounts");
         }
     }
 }

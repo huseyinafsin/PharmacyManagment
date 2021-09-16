@@ -10,8 +10,8 @@ using PharmacyManagmentV2.Contexts;
 namespace PharmacyManagmentV2.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210916051414_init2")]
-    partial class init2
+    [Migration("20210916123531_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -312,7 +312,7 @@ namespace PharmacyManagmentV2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BankAccount");
+                    b.ToTable("BankAccounts");
                 });
 
             modelBuilder.Entity("PharmacyManagmentV2.Data.Category", b =>
@@ -866,7 +866,7 @@ namespace PharmacyManagmentV2.Migrations
             modelBuilder.Entity("PharmacyManagmentV2.Data.Pharmacy", b =>
                 {
                     b.HasOne("PharmacyManagmentV2.Data.BankAccount", "BankAccount")
-                        .WithMany("Pharmacies")
+                        .WithMany()
                         .HasForeignKey("BankAccountId");
 
                     b.Navigation("BankAccount");
@@ -897,11 +897,6 @@ namespace PharmacyManagmentV2.Migrations
                     b.Navigation("Purchases");
 
                     b.Navigation("Sells");
-                });
-
-            modelBuilder.Entity("PharmacyManagmentV2.Data.BankAccount", b =>
-                {
-                    b.Navigation("Pharmacies");
                 });
 
             modelBuilder.Entity("PharmacyManagmentV2.Data.Category", b =>

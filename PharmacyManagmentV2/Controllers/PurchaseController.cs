@@ -45,19 +45,24 @@ namespace PharmacyManagmentV2.Controllers
         {
             ViewData["CustomerList"] = _manufacturerRepository.GetManufacturers();
             var currentUserId = int.Parse(_userManager.GetUserId(User));
-            var currentUser = _userManager.Users.Include(m => m.Pharmacy).Include(m => m.Pharmacy.BankAccounts).FirstOrDefault(p => p.Id == currentUserId);
+            var currentUser = _userManager.Users.Include(m => m.Pharmacy).Include(m => m.Pharmacy.BankAccount).FirstOrDefault(p => p.Id == currentUserId);
             var userPharmacy = currentUser.Pharmacy;
-            var pharmcyAccounts = currentUser.Pharmacy.BankAccounts.ToList();
-            var pharmacy = _pharmacies.GetAll()
-                .Include(p => p.BankAccounts)
-                .Include(p => p.ApplicationUsers)
-                .Include(p => p.Medicines)
-                .FirstOrDefault();
+            var pharmcyBankAccount = currentUser.Pharmacy.BankAccount;
+          
             var model = new PurchaseModel();
             model.ApplicationUser = currentUser;
             model.Pharmacy = userPharmacy;
+            model.Pharmacy.BankAccount = pharmcyBankAccount;
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Purchase(PurchaseModel model)
+        {
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

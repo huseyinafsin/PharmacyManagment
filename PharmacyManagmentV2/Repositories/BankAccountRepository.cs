@@ -40,6 +40,7 @@ namespace PharmacyManagmentV2.Repositories
         {
             BankAccount bankAccount = new BankAccount();
             _context.BankAccounts.Add(bankAccount);
+            _context.SaveChanges();
             return bankAccount;
         }
 

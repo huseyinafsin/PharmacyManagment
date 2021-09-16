@@ -11,11 +11,12 @@ namespace PharmacyManagmentV2.Data
         {
             Medicines = new HashSet<Medicine>();
             ApplicationUsers = new HashSet<ApplicationUser>();
-            BankAccounts = new HashSet<BankAccount>();
         }
+
         public  string Name { get; set; }
+        public virtual BankAccount BankAccount { get; set; }
+
         public virtual ICollection<Medicine> Medicines { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
-        public  virtual ICollection<BankAccount> BankAccounts { get; set; }
     }
 }
