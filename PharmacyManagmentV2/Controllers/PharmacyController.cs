@@ -35,7 +35,7 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Pharmacy
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pharmacies.ToListAsync());
+            return View(await _context.Pharmacies.Include(p=>p.BankAccount).ToListAsync());
         }
 
         // GET: Pharmacy/Details/5
@@ -47,6 +47,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var pharmacy = await _context.Pharmacies
+                .Include(p=>p.BankAccount)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pharmacy == null)
             {
@@ -160,7 +161,7 @@ namespace PharmacyManagmentV2.Controllers
 
         // GET: Pharmacy/Users/id
         // [Authorize(Roles ="User Assign")]
-        public async Task<IActionResult> UserAssign(int id)
+        public IActionResult UserAssign(int id)
         {
             var allUsers = _userManager.Users.ToList();
             var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I => I.Id);
@@ -177,7 +178,7 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserAssign(int id, List<SetUserViewModel> list)
+        public IActionResult UserAssign(int id, List<SetUserViewModel> list)
         {
 
             foreach (var item in list)
@@ -203,18 +204,19 @@ namespace PharmacyManagmentV2.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult SetBankAccount()
+        public IActionResult SetBankAccount(int id)
         {
-            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts, "Id", "AccountName");
+            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts.Where(p=>p.IsTaken==false), "Id", "AccountName");
             return View();
         }
 
         [HttpPost]
-        public IActionResult SetBankAccount(int id, BankAccount model)
+        public async Task<IActionResult> SetBankAccount(int id, BankAccount model)
         {
-            var pharmacy = _context.Pharmacies.Include(p => p.BankAccount).FirstOrDefault(p => p.Id == id);
-            pharmacy.BankAccount = _context.BankAccounts.Find(model.Id);
+            var pharmacy = await _context.Pharmacies.Include(p=>p.BankAccount).FirstOrDefaultAsync(m => m.Id == id-1);
+
+           pharmacy.BankAccount  = _context.BankAccounts.FirstOrDefault(p=>p.Id==model.Id);
+            
             _context.Pharmacies.Update(pharmacy);
             _context.SaveChanges();
 
