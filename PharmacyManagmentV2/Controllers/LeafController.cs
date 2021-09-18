@@ -2,39 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
+
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class LeafController : Controller
     {
-        private readonly AppDBContext _context;
-
-        public LeafController(AppDBContext context)
+        private readonly LeafManager _leafManager;
+        public LeafController(LeafManager leafManager)
         {
-            _context = context;
+            _leafManager = leafManager;
         }
 
         // GET: Leaf
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Leaves.ToListAsync());
+            return View(_leafManager.GetLeaves());
         }
 
         // GET: Leaf/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var leaf = await _context.Leaves
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var leaf = _leafManager.GetLeaf(id.Value);
             if (leaf == null)
             {
                 return NotFound();
@@ -54,26 +52,25 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LeafType,TotalNumberPerBox,Id,CreatAt")] Leaf leaf)
+        public IActionResult Create([Bind("LeafType,TotalNumberPerBox,Id,CreatAt")] Leaf leaf)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(leaf);
-                await _context.SaveChangesAsync();
+                _leafManager.AddLeaf(leaf);
                 return RedirectToAction(nameof(Index));
             }
             return View(leaf);
         }
 
         // GET: Leaf/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var leaf = await _context.Leaves.FindAsync(id);
+            var leaf = _leafManager.GetLeaf(id.Value);
             if (leaf == null)
             {
                 return NotFound();
@@ -86,7 +83,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LeafType,TotalNumberPerBox,Id,CreatAt")] Leaf leaf)
+        public IActionResult Edit(int id, [Bind("LeafType,TotalNumberPerBox,Id,CreatAt")] Leaf leaf)
         {
             if (id != leaf.Id)
             {
@@ -97,8 +94,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(leaf);
-                    await _context.SaveChangesAsync();
+                    _leafManager.UpdateLeaf(leaf);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,15 +113,14 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: Leaf/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var leaf = await _context.Leaves
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var leaf = _leafManager.GetLeaf(id.Value);
             if (leaf == null)
             {
                 return NotFound();
@@ -137,17 +132,19 @@ namespace PharmacyManagmentV2.Controllers
         // POST: Leaf/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var leaf = await _context.Leaves.FindAsync(id);
-            _context.Leaves.Remove(leaf);
-            await _context.SaveChangesAsync();
+            var leaf = _leafManager.GetLeaf(id);
+            if (leaf != null)
+            {
+                _leafManager.DeleteLeaf(leaf);
+            }
             return RedirectToAction(nameof(Index));
         }
 
         private bool LeafExists(int id)
         {
-            return _context.Leaves.Any(e => e.Id == id);
+            return _leafManager.GetLeaves().Any(e => e.Id == id);
         }
     }
 }

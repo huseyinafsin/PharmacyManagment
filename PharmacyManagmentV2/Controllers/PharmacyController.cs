@@ -1,54 +1,58 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Abstract;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class PharmacyController : Controller
     {
-        private readonly AppDBContext _context;
-        private readonly IPharmacyRepository _pharmacyRepositry;
-        private readonly IBankAccountRepository _bankAccountRepository;
+        private readonly PharmcyManager _pharmacyManager;
+        private readonly BankAccountManager _bankAccountManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PharmacyController(AppDBContext context,
+        public PharmacyController(
             UserManager<ApplicationUser> userManager,
-            IPharmacyRepository pharmacyRepositry,
-            IBankAccountRepository bankAccountRepository)
+            PharmcyManager pharmcyManager,
+            BankAccountManager bankAccountManager)
 
         {
-            _context = context;
             _userManager = userManager;
-            _pharmacyRepositry = pharmacyRepositry;
-            _bankAccountRepository = bankAccountRepository;
+            _pharmacyManager = pharmcyManager;
+            _bankAccountManager = bankAccountManager;
         }
 
         // GET: Pharmacy
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Pharmacies.Include(p => p.BankAccount).ToListAsync());
+            var pharmacies = _pharmacyManager
+                .GetPharmacies()
+                .AsQueryable()
+                .Include(p => p.BankAccount)
+                .ToList();
+            return View(pharmacies);
         }
 
         // GET: Pharmacy/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pharmacy = await _context.Pharmacies
+            var pharmacy = _pharmacyManager.GetPharmacies()
+                .AsQueryable()
                 .Include(p => p.BankAccount)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefault(p => p.Id == id);
             if (pharmacy == null)
             {
                 return NotFound();
@@ -68,26 +72,25 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
+        public IActionResult Create([Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pharmacy);
-                await _context.SaveChangesAsync();
+                _pharmacyManager.AddPharmacy(pharmacy);
                 return RedirectToAction(nameof(Index));
             }
             return View(pharmacy);
         }
 
         // GET: Pharmacy/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pharmacy = await _context.Pharmacies.FindAsync(id);
+            var pharmacy = _pharmacyManager.GetPharmacy(id.Value);
             if (pharmacy == null)
             {
                 return NotFound();
@@ -100,7 +103,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
+        public IActionResult Edit(int id, [Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
         {
             if (id != pharmacy.Id)
             {
@@ -111,8 +114,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(pharmacy);
-                    await _context.SaveChangesAsync();
+                    _pharmacyManager.UpdatePharmacy(pharmacy);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,15 +133,14 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: Pharmacy/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pharmacy = await _context.Pharmacies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var pharmacy = _pharmacyManager.GetPharmacy(id.Value);
             if (pharmacy == null)
             {
                 return NotFound();
@@ -151,11 +152,10 @@ namespace PharmacyManagmentV2.Controllers
         // POST: Pharmacy/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var pharmacy = await _context.Pharmacies.FindAsync(id);
-            _context.Pharmacies.Remove(pharmacy);
-            await _context.SaveChangesAsync();
+            var pharmacy = _pharmacyManager.GetPharmacy(id);
+            _pharmacyManager.DeletePharmacy(pharmacy);
             return RedirectToAction(nameof(Index));
         }
 
@@ -163,6 +163,8 @@ namespace PharmacyManagmentV2.Controllers
         // [Authorize(Roles ="User Assign")]
         public IActionResult UserAssign(int id)
         {
+            var pharmacyDal = new IPharmacyDal();
+            using var a = pharmacyDal;
             var allUsers = _userManager.Users.ToList();
             var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I => I.Id);
             var assignUsers = new List<SetUserViewModel>();

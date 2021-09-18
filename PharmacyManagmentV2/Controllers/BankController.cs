@@ -2,39 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
+
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class BankController : Controller
     {
-        private readonly AppDBContext _context;
-
-        public BankController(AppDBContext context)
+        private readonly BankAccountManager _bankAccountManager;
+        public BankController(BankAccountManager bankAccountManager)
         {
-            _context = context;
+            _bankAccountManager = bankAccountManager;
         }
 
         // GET: BankAccounts
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.BankAccounts.ToListAsync());
+            return View(_bankAccountManager.GetBankAccounts().ToList());
         }
 
         // GET: BankAccounts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccounts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var bankAccount = _bankAccountManager.GetBankAccounts().FirstOrDefault(b => b.Id == id);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -54,26 +52,25 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccountNumber,AccountName,Branch,Balance,CreditLine,Id,CreatAt")] BankAccount bankAccount)
+        public IActionResult Create([Bind("AccountNumber,AccountName,Branch,Balance,CreditLine,Id,CreatAt")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(bankAccount);
-                await _context.SaveChangesAsync();
+                _bankAccountManager.AddBankAccount(bankAccount);
                 return RedirectToAction(nameof(Index));
             }
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccounts.FindAsync(id);
+            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -86,7 +83,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AccountNumber,AccountName,Branch,Balance,CreditLine,Id,CreatAt")] BankAccount bankAccount)
+        public IActionResult Edit(int id, [Bind("AccountNumber,AccountName,Branch,Balance,CreditLine,Id,CreatAt")] BankAccount bankAccount)
         {
             if (id != bankAccount.Id)
             {
@@ -97,8 +94,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(bankAccount);
-                    await _context.SaveChangesAsync();
+                    _bankAccountManager.UpdateBankAccount(bankAccount);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,15 +113,15 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: BankAccounts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccounts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
+
             if (bankAccount == null)
             {
                 return NotFound();
@@ -137,17 +133,17 @@ namespace PharmacyManagmentV2.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var bankAccount = await _context.BankAccounts.FindAsync(id);
-            _context.BankAccounts.Remove(bankAccount);
-            await _context.SaveChangesAsync();
+            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
+            _bankAccountManager.DeleteBankAccount(bankAccount);
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool BankAccountExists(int id)
         {
-            return _context.BankAccounts.Any(e => e.Id == id);
+            return _bankAccountManager.GetBankAccounts().Any(e => e.Id == id);
         }
     }
 }

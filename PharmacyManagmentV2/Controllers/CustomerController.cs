@@ -2,41 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly AppDBContext _context;
-        private readonly IGenericRepository<Customer> _customer;
-        private readonly IGenericRepository<Address> _address;
+        private readonly CustomerManager _customerManager;
 
-        public CustomerController(AppDBContext context,
-            IGenericRepository<Customer> customer,
-            IGenericRepository<Address> address)
+        public CustomerController(CustomerManager customerManager)
         {
-            _context    =   context;
-            _customer   =   customer;
-            _address    =  address;
+            _customerManager = customerManager;
         }
 
         // GET: Application/Customer
         [HttpGet]
         [ActionName("Index")]
-        [Authorize(Roles ="List Customers")]
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "List Customers")]
+        public IActionResult Index()
         {
-            var customers = _customer.GetAll().Include(c => c.Address);
-            return View(await customers.ToListAsync());
-            
+            var customers = _customerManager.GetCustomers().AsQueryable()
+                .Include(c => c.Address).ToList();
+            return View(customers);
+
         }
 
         // GET: Application/Customer/Details/5
@@ -50,8 +45,9 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var customer = await _customer
-                .GetAll()
+            var customer = await _customerManager
+                .GetCustomers()
+                .AsQueryable()
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
@@ -76,12 +72,12 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Customer customer)
+        public IActionResult Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
-                await _customer.Create(customer);
-                await _context.SaveChangesAsync();
+                _customerManager.AddCustomer(customer);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -90,8 +86,8 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Application/Customer/Edit/5
         [HttpGet]
         [ActionName("Edit")]
-        [Authorize(Roles ="Edit Customer")]
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Roles = "Edit Customer")]
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -99,10 +95,11 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             //var customer = await _context.Customers.FindAsync(id);
-            var customer = await _customer
-                .GetAll()
-                .Include(c=>c.Address)
-                .FirstOrDefaultAsync(c=>c.Id==id);
+            var customer = _customerManager
+                .GetCustomers()
+                .AsQueryable()
+                .Include(c => c.Address)
+                .FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
@@ -115,7 +112,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public IActionResult Edit(int id, Customer customer)
         {
             if (id != customer.Id)
             {
@@ -126,8 +123,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    await _customer.Update(customer);
-                    await _context.SaveChangesAsync();
+                    _customerManager.UpdateCustomer(customer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -147,18 +143,19 @@ namespace PharmacyManagmentV2.Controllers
 
         // GET: Application/Customer/Delete/5
         [ActionName("Delete")]
-        [Authorize(Roles ="Delete Customer")]
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Delete Customer")]
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _customer
-                .GetAll()
+            var customer = _customerManager
+                .GetCustomers()
+                .AsQueryable()
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id).Result;
             if (customer == null)
             {
                 return NotFound();
@@ -170,24 +167,23 @@ namespace PharmacyManagmentV2.Controllers
         // POST: Application/Customer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
 
-            var customer = await _customer
-                .GetAll()
+            var customer = _customerManager
+                .GetCustomers()
+                .AsQueryable()
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id==id);
+                .FirstOrDefaultAsync(c => c.Id == id).Result;
 
-            await _address.Delete(customer.Address);
-            await _customer.Delete(customer);
+            _customerManager.DeleteCustomer(customer);
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return _customer.GetAll()
+            return _customerManager.GetCustomers()
                 .Any(e => e.Id == id);
         }
     }

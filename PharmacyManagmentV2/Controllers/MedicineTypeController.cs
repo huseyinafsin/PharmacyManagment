@@ -2,39 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
+
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class MedicineTypeController : Controller
     {
-        private readonly AppDBContext _context;
-
-        public MedicineTypeController(AppDBContext context)
+        private readonly MedicineTypeManager _medicineTypeManager;
+        public MedicineTypeController()
         {
-            _context = context;
         }
 
         // GET: MedicineType
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.MedicineTypes.ToListAsync());
+            return View(_medicineTypeManager.GetMedicineTypes());
         }
 
         // GET: MedicineType/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicineType = await _context.MedicineTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -54,26 +53,25 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
+        public IActionResult Create([Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(medicineType);
-                await _context.SaveChangesAsync();
+                _medicineTypeManager.AddMedicineType(medicineType);
                 return RedirectToAction(nameof(Index));
             }
             return View(medicineType);
         }
 
         // GET: MedicineType/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicineType = await _context.MedicineTypes.FindAsync(id);
+            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -86,7 +84,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
+        public IActionResult Edit(int id, [Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
         {
             if (id != medicineType.Id)
             {
@@ -97,8 +95,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(medicineType);
-                    await _context.SaveChangesAsync();
+                    _medicineTypeManager.AddMedicineType(medicineType);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,15 +114,14 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: MedicineType/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicineType = await _context.MedicineTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -137,17 +133,19 @@ namespace PharmacyManagmentV2.Controllers
         // POST: MedicineType/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var medicineType = await _context.MedicineTypes.FindAsync(id);
-            _context.MedicineTypes.Remove(medicineType);
-            await _context.SaveChangesAsync();
+            var medicineType = _medicineTypeManager.GetMedicineType(id);
+            if (medicineType!=null)
+            {
+                _medicineTypeManager.DeleteMedicineType(medicineType);
+            }
             return RedirectToAction(nameof(Index));
         }
 
         private bool MedicineTypeExists(int id)
         {
-            return _context.MedicineTypes.Any(e => e.Id == id);
+            return _medicineTypeManager.GetMedicineTypes().Any(e => e.Id == id);
         }
     }
 }

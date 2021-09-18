@@ -2,39 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
+
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDBContext _context;
-
-        public CategoryController(AppDBContext context)
+        private readonly CategoryManager _categoryManager;
+        public CategoryController(CategoryManager categoryManager)
         {
-            _context = context;
+            _categoryManager = categoryManager;
         }
 
         // GET: Category
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(_categoryManager.GetCategories().ToList());
         }
 
         // GET: Category/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = _categoryManager.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -54,26 +52,25 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Status,Id,CreatAt")] Category category)
+        public IActionResult Create([Bind("Name,Status,Id,CreatAt")] Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                _categoryManager.AddCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
 
         // GET: Category/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = _categoryManager.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -86,7 +83,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Status,Id,CreatAt")] Category category)
+        public IActionResult Edit(int id, [Bind("Name,Status,Id,CreatAt")] Category category)
         {
             if (id != category.Id)
             {
@@ -97,8 +94,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    _categoryManager.UpdateCategory(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -117,15 +113,14 @@ namespace PharmacyManagmentV2.Controllers
         }
 
         // GET: Category/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = _categoryManager.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -137,17 +132,19 @@ namespace PharmacyManagmentV2.Controllers
         // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            var category = _categoryManager.GetCategory(id.Value);
+            if (category != null)
+            {
+                _categoryManager.DeleteCategory(category);
+            }
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return _categoryManager.GetCategories().Any(e => e.Id == id);
         }
     }
 }

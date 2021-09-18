@@ -3,29 +3,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly AppDBContext _context;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(AppDBContext context,
+        public AdminController(
                                RoleManager<ApplicationRole> roleManager,
                                UserManager<ApplicationUser> userManager)
         {
-            _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
         }
@@ -34,7 +30,7 @@ namespace PharmacyManagmentV2.Controllers
         [Authorize(Roles = "User Roles")]
         public IActionResult UserRoles()
         {
-            return View(_context.ApplicationUsers.ToList());
+            return View(_userManager.Users.ToList());
         }
 
         // GET: Admin/RoleAssign/5
@@ -85,7 +81,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var applicationRole = await _context.Roles
+            var applicationRole = await _roleManager.Roles
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationRole == null)
             {
@@ -95,17 +91,17 @@ namespace PharmacyManagmentV2.Controllers
             return View(applicationRole);
         }
 
-      
+
 
         // GET: Admin/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var applicationRole = await _context.Roles.FindAsync(id);
+            var applicationRole = _roleManager.Roles.FirstOrDefault(P => P.Id == id);
             if (applicationRole == null)
             {
                 return NotFound();
@@ -118,7 +114,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NormalizedName,ConcurrencyStamp")] ApplicationRole applicationRole)
+        public IActionResult Edit(int id, [Bind("Id,Name,NormalizedName,ConcurrencyStamp")] ApplicationRole applicationRole)
         {
             if (id != applicationRole.Id)
             {
@@ -130,8 +126,7 @@ namespace PharmacyManagmentV2.Controllers
                 try
                 {
 
-                    _context.Update(applicationRole);
-                    await _context.SaveChangesAsync();
+                    _ = _roleManager.UpdateAsync(applicationRole);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -157,7 +152,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var applicationRole = await _context.Roles
+            var applicationRole = await _roleManager.Roles
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationRole == null)
             {
@@ -172,15 +167,14 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var applicationRole = await _context.Roles.FindAsync(id);
-            _context.Roles.Remove(applicationRole);
-            await _context.SaveChangesAsync();
+            var applicationRole =  _roleManager.Roles.FirstOrDefault(p=>p.Id==id);
+            _ = _roleManager.DeleteAsync(applicationRole);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ApplicationRoleExists(int id)
         {
-            return _context.Roles.Any(e => e.Id == id);
+            return _roleManager.Roles.Any(e => e.Id == id);
         }
        
     }

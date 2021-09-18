@@ -2,53 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class ManufacturerController : Controller
     {
-        private readonly AppDBContext _context;
-        private readonly IGenericRepository<Manufacturer> _manufacturer;
-        private readonly IGenericRepository<Address> _address;
+        private readonly ManufacturerManager _manufacturerManager;
 
-        public ManufacturerController(AppDBContext context,
-            IGenericRepository<Manufacturer> manufacturer,
-            IGenericRepository<Address> address)
+        public ManufacturerController( ManufacturerManager manufacturerManager)
         {
-            _context = context;
-            _manufacturer = manufacturer;
-            _address = address;
+            _manufacturerManager = manufacturerManager;
         }
 
         // GET: Application/Manufacturer
-        [Authorize(Roles ="List Manufacturer")]
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "List Manufacturer")]
+        public IActionResult Index()
         {
-            var manufacturers = _manufacturer
-                .GetAll()
-                .Include(m => m.Address);
-            return View(await manufacturers.ToListAsync());
+            var manufacturers = _manufacturerManager
+                .GetManufacturers()
+                .AsQueryable()
+                .Include(m => m.Address).ToList();
+            return View(manufacturers);
         }
 
         // GET: Application/Manufacturer/Details/5
         [Authorize(Roles = "Manufacturer Details")]
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var manufacturer = await _manufacturer
-                .GetAll()
+            var manufacturer = _manufacturerManager
+                .GetManufacturers()
+                .AsQueryable()
                 .Include(m => m.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (manufacturer == null)
@@ -73,12 +69,12 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Manufacturer manufacturer)
+        public IActionResult Create(Manufacturer manufacturer)
         {
             if (ModelState.IsValid)
             {
-                await _manufacturer.Create(manufacturer);
-                await _context.SaveChangesAsync();
+                _manufacturerManager.AddManufacturer(manufacturer);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(manufacturer);
@@ -94,8 +90,9 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var manufacturer = await _manufacturer
-                .GetAll()
+            var manufacturer = await _manufacturerManager
+                .GetManufacturers()
+                .AsQueryable()
                 .Include(c=>c.Address)
                 .FirstOrDefaultAsync(c=>c.Id==id);
             if (manufacturer == null)
@@ -110,7 +107,7 @@ namespace PharmacyManagmentV2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  Manufacturer manufacturer)
+        public IActionResult Edit(int id, Manufacturer manufacturer)
         {
             if (id != manufacturer.Id)
             {
@@ -121,8 +118,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    await _manufacturer.Update(manufacturer);
-                    await _context.SaveChangesAsync();
+                    _manufacturerManager.UpdateManufacturer(manufacturer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -150,8 +146,9 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var manufacturer = await _manufacturer
-                .GetAll()
+            var manufacturer = await _manufacturerManager
+                .GetManufacturers()
+                .AsQueryable()
                 .Include(m => m.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (manufacturer == null)
@@ -167,21 +164,20 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var manufacturer = await _manufacturer
-                .GetAll()
+            var manufacturer = await _manufacturerManager
+                .GetManufacturers()
+                .AsQueryable()
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            await _address.Delete(manufacturer.Address);
-            await _manufacturer.Delete(manufacturer);
+            _manufacturerManager.DeleteManufacturer(manufacturer);
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ManufacturerExists(int id)
         {
-            return _manufacturer.GetAll().Any(e => e.Id == id);
+            return _manufacturerManager.GetManufacturers().Any(e => e.Id == id);
         }
     }
 }
