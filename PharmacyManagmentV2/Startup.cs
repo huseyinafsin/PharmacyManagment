@@ -94,7 +94,10 @@ namespace PharmacyManagmentV2
 
             app.UseEndpoints(endpoints =>
             {
-
+                endpoints.MapControllerRoute(
+                    name:"Pharmacy",
+                    pattern: "{controller=Pharmacy}/{action=SetBankAccount}/{id?}"
+                    );
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -35,7 +35,7 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Pharmacy
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pharmacies.Include(p=>p.BankAccount).ToListAsync());
+            return View(await _context.Pharmacies.Include(p => p.BankAccount).ToListAsync());
         }
 
         // GET: Pharmacy/Details/5
@@ -47,7 +47,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var pharmacy = await _context.Pharmacies
-                .Include(p=>p.BankAccount)
+                .Include(p => p.BankAccount)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pharmacy == null)
             {
@@ -204,20 +204,24 @@ namespace PharmacyManagmentV2.Controllers
             return View();
         }
 
-        public IActionResult SetBankAccount(int id)
+        public IActionResult SetBankAccount()
         {
-            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts.Where(p=>p.IsTaken==false), "Id", "AccountName");
+            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts.Where(p => p.IsTaken == false), "Id", "AccountName");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SetBankAccount(int id, BankAccount model)
         {
-            var pharmacy = await _context.Pharmacies.Include(p=>p.BankAccount).FirstOrDefaultAsync(m => m.Id == id-1);
+            var pharmacy = await _context.Pharmacies.Include(p => p.BankAccount).FirstOrDefaultAsync(m => m.Id == id);
 
-           pharmacy.BankAccount  = _context.BankAccounts.FirstOrDefault(p=>p.Id==model.Id);
-            
+            var bankAccount = _context.BankAccounts.FirstOrDefault(p => p.Id == model.Id);
+            bankAccount.IsTaken = true;
+            var lastAccount = pharmacy.BankAccount;
+            lastAccount.IsTaken = false;
+            pharmacy.BankAccount = bankAccount;
             _context.Pharmacies.Update(pharmacy);
+            _context.UpdateRange(bankAccount,lastAccount);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
