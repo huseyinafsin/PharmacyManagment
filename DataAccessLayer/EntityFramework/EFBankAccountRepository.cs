@@ -15,30 +15,33 @@ namespace DataAccessLayer.EntityFramework
     {
       
 
-        public void Deducate(BankAccount account, string accountType, int quantity)
-        {
-            if (accountType.ToLowerInvariant()=="credit")
-            {
+        //public void Deducate(BankAccount account, string accountType, int quantity)
+        //{
+        //    if (accountType.ToLowerInvariant()=="credit")
+        //    {
                 
-            }
-            else if (accountType.ToLowerInvariant()=="balance")
-            {
+        //    }
+        //    else if (accountType.ToLowerInvariant()=="balance")
+        //    {
 
-            }
-            else
-            {
-                throw new Exception("Wrong account type");
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Wrong account type");
+        //    }
+        //}
 
-        public BankAccount GetBankAccount()
-        {
-            using var _context = new AppDBContext();
-            BankAccount bankAccount = new BankAccount();
-            _context.BankAccounts.Add(bankAccount);
-            _context.SaveChanges();
-            return bankAccount;
-        }
+        //public BankAccount GetBankAccount()
+        //{
+        //    using var _context = new AppDBContext();
+        //    BankAccount bankAccount = new BankAccount();
+        //    _context.BankAccounts.Add(bankAccount);
+        //    _context.SaveChanges();
+        //    return bankAccount;
+        //}
 
+    
+
+      
     }
 }

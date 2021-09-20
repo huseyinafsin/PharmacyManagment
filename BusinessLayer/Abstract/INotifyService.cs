@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace BusinessLayer.Abstract
         void AddNotify(Notify notify);
         void DeleteNotify(Notify notify);
         void UpdateNotify(Notify notify);
-        List<Notify> GetNotifies();
+        Task<IQueryable<Notify>> GetNotifies();
+        List<Notify> GetNotifies(Expression<Func<Notify, bool>> expression);
         Notify GetNotify(int id);
     }
 }

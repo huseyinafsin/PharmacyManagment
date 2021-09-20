@@ -5,6 +5,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,9 +35,14 @@ namespace BusinessLayer.Concrete
             return eFMedicineRepository.GetById(id).Result;
         }
 
-        public List<Medicine> GetMedicines()
+        public async Task<IQueryable<Medicine>> GetMedicines()
         {
-            return eFMedicineRepository.GetAll().ToList();
+            return await eFMedicineRepository.GetAll();
+        }
+
+        public List<Medicine> GetMedicines(Expression<Func<Medicine, bool>> expression)
+        {
+            return eFMedicineRepository.GetAll(expression).ToList();
         }
 
         public void UpdateMedicine(Medicine medicine)

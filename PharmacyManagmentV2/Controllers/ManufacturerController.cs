@@ -27,8 +27,7 @@ namespace PharmacyManagmentV2.Controllers
         public IActionResult Index()
         {
             var manufacturers = _manufacturerManager
-                .GetManufacturers()
-                .AsQueryable()
+                .GetManufacturers().Result
                 .Include(m => m.Address).ToList();
             return View(manufacturers);
         }
@@ -43,8 +42,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var manufacturer = _manufacturerManager
-                .GetManufacturers()
-                .AsQueryable()
+                .GetManufacturers().Result
                 .Include(m => m.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (manufacturer == null)
@@ -91,8 +89,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var manufacturer = await _manufacturerManager
-                .GetManufacturers()
-                .AsQueryable()
+                .GetManufacturers().Result
                 .Include(c=>c.Address)
                 .FirstOrDefaultAsync(c=>c.Id==id);
             if (manufacturer == null)
@@ -147,7 +144,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var manufacturer = await _manufacturerManager
-                .GetManufacturers()
+                .GetManufacturers().Result
                 .AsQueryable()
                 .Include(m => m.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -165,8 +162,7 @@ namespace PharmacyManagmentV2.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var manufacturer = await _manufacturerManager
-                .GetManufacturers()
-                .AsQueryable()
+                .GetManufacturers().Result
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -177,7 +173,7 @@ namespace PharmacyManagmentV2.Controllers
 
         private bool ManufacturerExists(int id)
         {
-            return _manufacturerManager.GetManufacturers().Any(e => e.Id == id);
+            return _manufacturerManager.GetManufacturers().Result.Any(e => e.Id == id);
         }
     }
 }

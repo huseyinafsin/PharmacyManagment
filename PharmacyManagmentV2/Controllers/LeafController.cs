@@ -144,7 +144,7 @@ namespace PharmacyManagmentV2.Controllers
 
         private bool LeafExists(int id)
         {
-            return _leafManager.GetLeaves().Any(e => e.Id == id);
+            return _leafManager.GetLeaves().Result.Any(e => e.Id == id);
         }
     }
 }

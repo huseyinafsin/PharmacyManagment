@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace BusinessLayer.Abstract
         void AddLeaf(Leaf leaf);
         void DeleteLeaf(Leaf leaf);
         void UpdateLeaf(Leaf leaf);
-        List<Leaf> GetLeaves();
+        Task<IQueryable<Leaf>> GetLeaves();
+        List<Leaf> GetLeaves(Expression<Func<Leaf, bool>> expression);
         Leaf GetLeaf(int id);
     }
 }

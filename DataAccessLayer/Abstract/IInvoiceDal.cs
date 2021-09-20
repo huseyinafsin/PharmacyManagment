@@ -7,7 +7,7 @@ using EntityLayer.Concrete;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface ISellDal: IGenericDal<Invoice>
+    public interface IInvoiceDal: IGenericDal<Invoice>
     {
     }
 }

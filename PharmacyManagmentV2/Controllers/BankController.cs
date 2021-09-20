@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,16 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class BankController : Controller
     {
-        private readonly BankAccountManager _bankAccountManager;
-        public BankController(BankAccountManager bankAccountManager)
+        private readonly IBankAccountService _bankAccountService;
+        public BankController(IBankAccountService bankAccountService)
         {
-            _bankAccountManager = bankAccountManager;
+            _bankAccountService = bankAccountService;
         }
 
         // GET: BankAccounts
         public IActionResult Index()
         {
-            return View(_bankAccountManager.GetBankAccounts().ToList());
+            return View(_bankAccountService.GetBankAccounts().Result.Where(b=>b.Status==true).ToList());
         }
 
         // GET: BankAccounts/Details/5
@@ -32,7 +33,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = _bankAccountManager.GetBankAccounts().FirstOrDefault(b => b.Id == id);
+            var bankAccount = _bankAccountService.GetBankAccounts().Result.FirstOrDefault(b => b.Id == id);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -56,7 +57,8 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bankAccountManager.AddBankAccount(bankAccount);
+                bankAccount.Status = true;
+                _bankAccountService.AddBankAccount(bankAccount);
                 return RedirectToAction(nameof(Index));
             }
             return View(bankAccount);
@@ -70,7 +72,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
+            var bankAccount = _bankAccountService.GetBankAccount(id.Value);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -94,7 +96,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _bankAccountManager.UpdateBankAccount(bankAccount);
+                    _bankAccountService.UpdateBankAccount(bankAccount);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,7 +122,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
+            var bankAccount = _bankAccountService.GetBankAccount(id.Value);
 
             if (bankAccount == null)
             {
@@ -135,15 +137,16 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
         {
-            var bankAccount = _bankAccountManager.GetBankAccount(id.Value);
-            _bankAccountManager.DeleteBankAccount(bankAccount);
-
+            var bankAccount = _bankAccountService.GetBankAccount(id.Value);
+            //  _bankAccountManager.DeleteBankAccount(bankAccount);
+            bankAccount.Status = false;
+            _bankAccountService.UpdateBankAccount(bankAccount);
             return RedirectToAction(nameof(Index));
         }
 
         private bool BankAccountExists(int id)
         {
-            return _bankAccountManager.GetBankAccounts().Any(e => e.Id == id);
+            return _bankAccountService.GetBankAccounts().Result.Any(e => e.Id == id &&(e.Status==true)) ;
         }
     }
 }

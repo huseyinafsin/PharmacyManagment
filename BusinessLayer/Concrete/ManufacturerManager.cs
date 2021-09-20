@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,9 +34,14 @@ namespace BusinessLayer.Concrete
             return eFManufacturerRepository.GetById(id).Result;
         }
 
-        public List<Manufacturer> GetManufacturers()
+        public async Task<IQueryable<Manufacturer>> GetManufacturers()
         {
-            return eFManufacturerRepository.GetAll().ToList();
+            return await  eFManufacturerRepository.GetAll();
+        }
+
+        public List<Manufacturer> GetManufacturers(Expression<Func<Manufacturer, bool>> expression)
+        {
+            return eFManufacturerRepository.GetAll(expression).ToList();
         }
 
         public void UpdateManufacturer(Manufacturer manufacturer)

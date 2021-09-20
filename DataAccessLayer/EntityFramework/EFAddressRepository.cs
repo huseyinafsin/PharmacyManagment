@@ -8,7 +8,6 @@ using DataAccessLayer.Repository;
 using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 
-using PharmacyManagmentV2.Repositories;
 
 namespace DataAccessLayer.EntityFramework
 {

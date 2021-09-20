@@ -47,8 +47,7 @@ namespace PharmacyManagmentV2.Controllers
         public IActionResult Index()
         {
             var appDBContext = _medicineManager
-                .GetMedicines()
-                .AsQueryable()
+                .GetMedicines().Result
                 .Include(m => m.Category)
                 .Include(m => m.Leaf)
                 .Include(m => m.Manufacturer)
@@ -69,8 +68,7 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             var medicine = await _medicineManager
-                .GetMedicines()
-                .AsQueryable()
+                .GetMedicines().Result
                 .Include(m => m.Category)
                 .Include(m => m.Leaf)
                 .Include(m => m.Manufacturer)
@@ -90,13 +88,13 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Medicine/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories(), "Id", "Name");
-            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves(), "Id", "LeafType");
-            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers(), "Id", "Name");
-            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases(), "Id", "Name");
-            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices(), "Id", "Id");
-            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes(), "Id", "Name");
-            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories().Result, "Id", "Name");
+            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves().Result, "Id", "LeafType");
+            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers().Result, "Id", "Name");
+            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases().Result, "Id", "Name");
+            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices().Result, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes().Result, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites().Result, "Id", "Name");
             return View();
         }
 
@@ -114,13 +112,13 @@ namespace PharmacyManagmentV2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories(), "Id", "Name");
-            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves(), "Id", "LeafType");
-            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers(), "Id", "Name");
-            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases(), "Id", "Name");
-            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices(), "Id", "Id");
-            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes(), "Id", "Name");
-            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories().Result, "Id", "Name");
+            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves().Result, "Id", "LeafType");
+            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers().Result, "Id", "Name");
+            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases().Result, "Id", "Name");
+            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices().Result, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes().Result, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites().Result, "Id", "Name");
             return View(medicine);
         }
 
@@ -137,13 +135,13 @@ namespace PharmacyManagmentV2.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories(), "Id", "Name");
-            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves(), "Id", "LeafType");
-            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers(), "Id", "Name");
-            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases(), "Id", "Name");
-            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices(), "Id", "Id");
-            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes(), "Id", "Name");
-            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories().Result, "Id", "Name");
+            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves().Result, "Id", "LeafType");
+            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers().Result, "Id", "Name");
+            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases().Result, "Id", "Name");
+            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices().Result, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes().Result, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites().Result, "Id", "Name");
             return View(medicine);
         }
 
@@ -180,13 +178,13 @@ namespace PharmacyManagmentV2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories(), "Id", "Name");
-            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves(), "Id", "LeafType");
-            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers(), "Id", "Name");
-            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases(), "Id", "Name");
-            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices(), "Id", "Id");
-            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes(), "Id", "Name");
-            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites(), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_categoryManager.GetCategories().Result, "Id", "Name");
+            ViewData["LeafId"] = new SelectList(_leafManager.GetLeaves().Result, "Id", "LeafType");
+            ViewData["ManufacturerId"] = new SelectList(_manufacturerManager.GetManufacturers().Result, "Id", "Name");
+            ViewData["PurchaseId"] = new SelectList(_purchaseManager.GetPurchases().Result, "Id", "Name");
+            ViewData["SellId"] = new SelectList(_ınvoiceManager.GetInvoices().Result, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_medicineTypeManager.GetMedicineTypes().Result, "Id", "Name");
+            ViewData["UnitId"] = new SelectList(_unitManager.GetUnites().Result, "Id", "Name");
             return View(medicine);
         }
 
@@ -198,8 +196,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var medicine = _medicineManager.GetMedicines()
-                .AsQueryable()
+            var medicine = _medicineManager.GetMedicines().Result
                 .Include(m => m.Category)
                 .Include(m => m.Leaf)
                 .Include(m => m.Manufacturer)
@@ -228,7 +225,7 @@ namespace PharmacyManagmentV2.Controllers
 
         private bool MedicineExists(int id)
         {
-            return _medicineManager.GetMedicines().Any(e => e.Id == id);
+            return _medicineManager.GetMedicines().Result.Any(e => e.Id == id);
         }
     }
 }

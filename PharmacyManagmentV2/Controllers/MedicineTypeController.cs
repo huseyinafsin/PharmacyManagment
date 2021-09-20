@@ -145,7 +145,7 @@ namespace PharmacyManagmentV2.Controllers
 
         private bool MedicineTypeExists(int id)
         {
-            return _medicineTypeManager.GetMedicineTypes().Any(e => e.Id == id);
+            return _medicineTypeManager.GetMedicineTypes().Result.Any(e => e.Id == id);
         }
     }
 }

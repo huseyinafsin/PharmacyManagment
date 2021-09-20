@@ -9,9 +9,9 @@ using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace PharmacyManagmentV2.Repositories
+namespace DataAccessLayer.EntityFramework
 {
-    public class EFSellRepository : GenericRepository<Invoice>, ISellDal
+    public class EFInvoiceRepository : GenericRepository<Invoice>, IInvoiceDal
     {
       
     }

@@ -2,8 +2,10 @@
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,9 +35,14 @@ namespace BusinessLayer.Concrete
             return eFAddressRepository.GetById(id).Result;
         }
 
-        public List<Address> GetAddresses()
+        public async Task<IQueryable<Address>> GetAddresses()
         {
-           return eFAddressRepository.GetAll().ToList();
+            return await  eFAddressRepository.GetAll();
+        }
+
+        public List<Address> GetAddresses(Expression<Func<Address, bool>> expression)
+        {
+            return eFAddressRepository.GetAll(expression).ToList();
         }
 
         public void UpdateAddress(Address address)

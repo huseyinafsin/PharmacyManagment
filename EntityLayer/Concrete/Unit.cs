@@ -16,7 +16,6 @@ namespace EntityLayer.Concrete
 
       
         public string Name { get; set; }
-        public string Status { get; set; }
 
         public virtual ICollection<Medicine> Medicines { get; set; }
     }

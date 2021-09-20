@@ -1,4 +1,4 @@
-﻿@model PharmacyManagmentV2.Data.Medicine
+﻿@model EntityLayer.Concrete.Medicine
 
 @{
     ViewData["Title"] = "Edit";
@@ -24,14 +24,14 @@
                 <span asp-validation-for="GenericName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                <label asp-for="Category.Id" class="control-label"></label>
+                <select asp-for="Category.Id" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="Category.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManufacturerId" class="control-label"></label>
-                <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
-                <span asp-validation-for="ManufacturerId" class="text-danger"></span>
+                <label asp-for="Manufacturer.Id" class="control-label"></label>
+                <select asp-for="Manufacturer.Id" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
+                <span asp-validation-for="Manufacturer.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Shelf" class="control-label"></label>
@@ -54,14 +54,14 @@
                 <span asp-validation-for="Strengh" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TypeId" class="control-label"></label>
-                <select asp-for="TypeId" class="form-control" asp-items="ViewBag.TypeId"></select>
-                <span asp-validation-for="TypeId" class="text-danger"></span>
+                <label asp-for="Type.Id" class="control-label"></label>
+                <select asp-for="Type.Id" class="form-control" asp-items="ViewBag.TypeId"></select>
+                <span asp-validation-for="Type.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnitId" class="control-label"></label>
-                <select asp-for="UnitId" class="form-control" asp-items="ViewBag.UnitId"></select>
-                <span asp-validation-for="UnitId" class="text-danger"></span>
+                <label asp-for="Unit.Id" class="control-label"></label>
+                <select asp-for="Unit.Id" class="form-control" asp-items="ViewBag.UnitId"></select>
+                <span asp-validation-for="Unit.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
@@ -79,19 +79,19 @@
                 <span asp-validation-for="Expriy" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LeafId" class="control-label"></label>
-                <select asp-for="LeafId" class="form-control" asp-items="ViewBag.LeafId"></select>
-                <span asp-validation-for="LeafId" class="text-danger"></span>
+                <label asp-for="Leaf.Id" class="control-label"></label>
+                <select asp-for="Leaf.Id" class="form-control" asp-items="ViewBag.LeafId"></select>
+                <span asp-validation-for="Leaf.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SellId" class="control-label"></label>
-                <select asp-for="SellId" class="form-control" asp-items="ViewBag.SellId"></select>
-                <span asp-validation-for="SellId" class="text-danger"></span>
+                <label asp-for="Invoice.Id" class="control-label"></label>
+                <select asp-for="Invoice.Id" class="form-control" asp-items="ViewBag.SellId"></select>
+                <span asp-validation-for="Invoice.Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PurchaseId" class="control-label"></label>
-                <select asp-for="PurchaseId" class="form-control" asp-items="ViewBag.PurchaseId"></select>
-                <span asp-validation-for="PurchaseId" class="text-danger"></span>
+                <label asp-for="Purchase.Id" class="control-label"></label>
+                <select asp-for="Purchase.Id" class="form-control" asp-items="ViewBag.PurchaseId"></select>
+                <span asp-validation-for="Purchase.Id" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">

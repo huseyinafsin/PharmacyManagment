@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,9 +35,14 @@ namespace BusinessLayer.Concrete
             return eFPurchaseRepository.GetById(id).Result;
         }
 
-        public List<Purchase> GetPurchases()
+        public async Task<IQueryable<Purchase>> GetPurchases()
         {
-            return eFPurchaseRepository.GetAll().ToList();
+            return await eFPurchaseRepository.GetAll();
+        }
+
+        public List<Purchase> GetPurchases(Expression<Func<Purchase, bool>> expression)
+        {
+            return eFPurchaseRepository.GetAll(expression).ToList();
         }
 
         public void UpdatePurchase(Purchase purchase)

@@ -1,49 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class PurchaseController : Controller
     {
-        private readonly AppDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IManufacturerRepository _manufacturerRepository;
-        private readonly IGenericRepository<Pharmacy> _pharmacies;
+        private readonly ManufacturerManager _manufacturerManager;
+        private readonly PharmcyManager _pharmcyManager;
 
 
-        public PurchaseController(AppDBContext context,
-                                   IManufacturerRepository manufacturerRepository,
+        public PurchaseController(
+                                   PharmcyManager pharmcyManager,
                                    UserManager<ApplicationUser> userManager,
-                                   IGenericRepository<Pharmacy> pharmacies
+                                   ManufacturerManager manufacturerManager
                                    )
 
         {
-            _context = context;
-            _manufacturerRepository = manufacturerRepository;
+            _manufacturerManager = manufacturerManager;
             _userManager = userManager;
-            _pharmacies = pharmacies;
+            _pharmcyManager = pharmcyManager;
 
         }
 
-        public AppDBContext Context => _context;
 
-        public AppDBContext Context1 => _context;
 
         [HttpGet]
         public async Task<IActionResult> Purchase()
         {
-            ViewData["CustomerList"] = _manufacturerRepository.GetManufacturers();
+            ViewData["CustomerList"] = _manufacturerManager.GetManufacturers();
             var currentUserId = int.Parse(_userManager.GetUserId(User));
             var currentUser = _userManager.Users.Include(m => m.Pharmacy).Include(m => m.Pharmacy.BankAccount).FirstOrDefault(p => p.Id == currentUserId);
             var userPharmacy = currentUser.Pharmacy;

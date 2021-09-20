@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace BusinessLayer.Abstract
         void AddMedicineType(MedicineType medicineType);
         void DeleteMedicineType(MedicineType medicineType);
         void UpdateMedicineType(MedicineType medicineType);
-        List<MedicineType> GetMedicineTypes();
+        Task<IQueryable<MedicineType>> GetMedicineTypes();
+        List<MedicineType> GetMedicineTypes(Expression<Func<MedicineType, bool>> expression);
         MedicineType GetMedicineType(int id);
     }
 }

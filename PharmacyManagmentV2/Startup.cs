@@ -1,18 +1,19 @@
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
+using DataAccessLayer.EntityFramework;
+using DataAccessLayer.Repository;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
-using PharmacyManagmentV2.Models;
-using PharmacyManagmentV2.Repositories;
 using System;
 
 
@@ -57,19 +58,30 @@ namespace PharmacyManagmentV2
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
 
-            services.AddScoped<IAddressRepository, AddressRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ILeafRepository, LeafRepository>();
-            services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
-            services.AddScoped<IMedicineRepository, MedicineRepository>();
-            services.AddScoped<IMedicineTypeRepository, MedicineTypeRepository>();
-            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-            services.AddScoped<ISellRepository, SellRepository>();
-            services.AddScoped<IPharmacyRepository, PharmacyRepository>();
-            services.AddScoped<IBankAccountRepository, BankAccountRepository>();
-            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository <>));
+            services.AddScoped<IAddressDal, EFAddressRepository>();
+            services.AddScoped<ICategoryDal, EFCategoryRepository>();
+            services.AddScoped<ICustomerDal, EFCustomerRepository>();
+            services.AddScoped<ILeafDal, EFLeafRepository>();
+            services.AddScoped<IManufacturerDal, EFManufacturerRepository>();
+            services.AddScoped<IMedicineDal, EFMedicineRepository>();
+            services.AddScoped<IMedicineTypeDal, EFMedicineTypeRepository>();
+            services.AddScoped<IPurchaseDal, EFPurchaseRepository>();
+            services.AddScoped<IInvoiceDal, EFInvoiceRepository>();
+            services.AddScoped<IPharmacyDal, EFPharmacyRepository>();
+            services.AddScoped<IBankAccountDal, EFBankAccountRepository>();
+            services.AddScoped(typeof(IGenericDal<>),typeof(GenericRepository <>));
 
+            services.AddScoped<IAddressService, AddressManager>();
+            services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<ICustomerService, CustomerManager>();
+            services.AddScoped<ILeafService, LeafManager>();
+            services.AddScoped<IManufacturerService, ManufacturerManager>();
+            services.AddScoped<IMedicineService, MedicineManager>();
+            services.AddScoped<IMedicineTypeService, MedicineTypeManager>();
+            services.AddScoped<IPurchaseService, PurchaseManager>();
+            services.AddScoped<IInvoiceService, InvoiceManager>();
+            services.AddScoped<IPharmacyService, PharmcyManager>();
+            services.AddScoped<IBankAccountService, BankAccountManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

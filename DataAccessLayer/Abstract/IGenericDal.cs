@@ -9,7 +9,8 @@ namespace DataAccessLayer.Abstract
 {
     public interface IGenericDal<T> where T : class
     {
-        IQueryable<T> GetAll();
+        Task<IQueryable<T>> GetAll();
+        List<T> GetAll( Expression< Func<T,bool>> expression );
         Task<T> GetById(int id);
         Task Create(T obj);
         Task Update(T obj);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +16,11 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly CustomerManager _customerManager;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(CustomerManager customerManager)
+        public CustomerController(ICustomerService customerService)
         {
-            _customerManager = customerManager;
+           _customerService = customerService;
         }
 
         // GET: Application/Customer
@@ -28,7 +29,7 @@ namespace PharmacyManagmentV2.Controllers
         [Authorize(Roles = "List Customers")]
         public IActionResult Index()
         {
-            var customers = _customerManager.GetCustomers().AsQueryable()
+            var customers =_customerService.GetCustomers().Result
                 .Include(c => c.Address).ToList();
             return View(customers);
 
@@ -45,9 +46,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var customer = await _customerManager
-                .GetCustomers()
-                .AsQueryable()
+            var customer = await _customerService
+                .GetCustomers().Result
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
@@ -76,7 +76,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _customerManager.AddCustomer(customer);
+               _customerService.AddCustomer(customer);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -95,11 +95,10 @@ namespace PharmacyManagmentV2.Controllers
             }
 
             //var customer = await _context.Customers.FindAsync(id);
-            var customer = _customerManager
-                .GetCustomers()
-                .AsQueryable()
+            var customer = _customerService
+                .GetCustomers().Result
                 .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id).Result;
             if (customer == null)
             {
                 return NotFound();
@@ -123,7 +122,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _customerManager.UpdateCustomer(customer);
+                   _customerService.UpdateCustomer(customer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,9 +150,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var customer = _customerManager
-                .GetCustomers()
-                .AsQueryable()
+            var customer =_customerService
+                .GetCustomers().Result
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(m => m.Id == id).Result;
             if (customer == null)
@@ -170,21 +168,19 @@ namespace PharmacyManagmentV2.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
 
-            var customer = _customerManager
-                .GetCustomers()
-                .AsQueryable()
+            var customer =_customerService
+                .GetCustomers().Result
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(c => c.Id == id).Result;
 
-            _customerManager.DeleteCustomer(customer);
+           _customerService.DeleteCustomer(customer);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return _customerManager.GetCustomers()
-                .Any(e => e.Id == id);
+            return _customerService.GetCustomers().Result.Any(e => e.Id == id);
         }
     }
 }

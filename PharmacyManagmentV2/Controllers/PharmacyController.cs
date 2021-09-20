@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,27 +17,25 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class PharmacyController : Controller
     {
-        private readonly PharmcyManager _pharmacyManager;
-        private readonly BankAccountManager _bankAccountManager;
+        private readonly IPharmacyService _pharmacyService;
+        private readonly IBankAccountService _bankAccountService;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public PharmacyController(
             UserManager<ApplicationUser> userManager,
-            PharmcyManager pharmcyManager,
-            BankAccountManager bankAccountManager)
-
+            IBankAccountService bankAccountService,
+            IPharmacyService pharmacyService)
         {
             _userManager = userManager;
-            _pharmacyManager = pharmcyManager;
-            _bankAccountManager = bankAccountManager;
+            _pharmacyService = pharmacyService;
+            _bankAccountService = bankAccountService;
         }
 
         // GET: Pharmacy
         public IActionResult Index()
         {
-            var pharmacies = _pharmacyManager
-                .GetPharmacies()
-                .AsQueryable()
+            var pharmacies = _pharmacyService
+                .GetPharmacies().Result
                 .Include(p => p.BankAccount)
                 .ToList();
             return View(pharmacies);
@@ -49,8 +49,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var pharmacy = _pharmacyManager.GetPharmacies()
-                .AsQueryable()
+            var pharmacy = _pharmacyService.GetPharmacies().Result
                 .Include(p => p.BankAccount)
                 .FirstOrDefault(p => p.Id == id);
             if (pharmacy == null)
@@ -76,7 +75,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _pharmacyManager.AddPharmacy(pharmacy);
+                _pharmacyService.AddPharmacy(pharmacy);
                 return RedirectToAction(nameof(Index));
             }
             return View(pharmacy);
@@ -90,7 +89,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var pharmacy = _pharmacyManager.GetPharmacy(id.Value);
+            var pharmacy = _pharmacyService.GetPharmacy(id.Value);
             if (pharmacy == null)
             {
                 return NotFound();
@@ -114,7 +113,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _pharmacyManager.UpdatePharmacy(pharmacy);
+                    _pharmacyService.UpdatePharmacy(pharmacy);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,7 +139,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var pharmacy = _pharmacyManager.GetPharmacy(id.Value);
+            var pharmacy = _pharmacyService.GetPharmacy(id.Value);
             if (pharmacy == null)
             {
                 return NotFound();
@@ -154,8 +153,8 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var pharmacy = _pharmacyManager.GetPharmacy(id);
-            _pharmacyManager.DeletePharmacy(pharmacy);
+            var pharmacy = _pharmacyService.GetPharmacy(id);
+            _pharmacyService.DeletePharmacy(pharmacy);
             return RedirectToAction(nameof(Index));
         }
 
@@ -163,10 +162,8 @@ namespace PharmacyManagmentV2.Controllers
         // [Authorize(Roles ="User Assign")]
         public IActionResult UserAssign(int id)
         {
-            var pharmacyDal = new IPharmacyDal();
-            using var a = pharmacyDal;
             var allUsers = _userManager.Users.ToList();
-            var pharmacyUsers = _pharmacyRepositry.GetUsers(id).Select(I => I.Id);
+            var pharmacyUsers = _pharmacyService.GetUsers(id).Select(I => I.Id);
             var assignUsers = new List<SetUserViewModel>();
 
             allUsers.ForEach(user => assignUsers.Add(new SetUserViewModel
@@ -188,11 +185,11 @@ namespace PharmacyManagmentV2.Controllers
                 if (item.HasAssign)
                 {
 
-                    _pharmacyRepositry.AssignUser(id, item.UserId);
+                    _pharmacyService.AssignUser(id, item.UserId);
                 }
                 else
                 {
-                    _pharmacyRepositry.RemoveUser(id, item.UserId);
+                    _pharmacyService.RemoveUser(id, item.UserId);
 
                 }
             }
@@ -206,31 +203,34 @@ namespace PharmacyManagmentV2.Controllers
             return View();
         }
 
-        public IActionResult SetBankAccount()
+        public async Task<IActionResult> SetBankAccount()
         {
-            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts.Where(p => p.IsTaken == false), "Id", "AccountName");
+            using var _context = new AppDBContext();
+            ViewData["BankAccounts"] = new SelectList(_context.BankAccounts.ToList(), "Id", "AccountName");
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetBankAccount(int id, BankAccount model)
+        public async Task<IActionResult> SetBankAccountAsync(int id, BankAccount model)
         {
-            var pharmacy = await _context.Pharmacies.Include(p => p.BankAccount).FirstOrDefaultAsync(m => m.Id == id);
+            var pharmacy = await _pharmacyService.GetPharmacies().Result
+                .Include(p => p.BankAccount)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            var bankAccount = _context.BankAccounts.FirstOrDefault(p => p.Id == model.Id);
+            var bankAccount = _bankAccountService.GetBankAccount( model.Id);
             bankAccount.IsTaken = true;
             var lastAccount = pharmacy.BankAccount;
             lastAccount.IsTaken = false;
             pharmacy.BankAccount = bankAccount;
-            _context.Pharmacies.Update(pharmacy);
-            _context.UpdateRange(bankAccount,lastAccount);
-            _context.SaveChanges();
+            _pharmacyService.UpdatePharmacy(pharmacy);
+            _bankAccountService.UpdateBankAccount(bankAccount);
+            _bankAccountService.UpdateBankAccount(lastAccount);
 
             return RedirectToAction(nameof(Index));
         }
         private bool PharmacyExists(int id)
         {
-            return _context.Pharmacies.Any(e => e.Id == id);
+            return _pharmacyService.GetPharmacies().Result.Any(e => e.Id == id);
         }
     }
 }

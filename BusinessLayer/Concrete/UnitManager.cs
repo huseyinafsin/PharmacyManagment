@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,9 +35,14 @@ namespace BusinessLayer.Concrete
             return eFUnitRepository.GetById(id).Result;
         }
 
-        public List<Unit> GetUnites()
+        public async Task<IQueryable<Unit>> GetUnites()
         {
-            return eFUnitRepository.GetAll().ToList();
+            return await eFUnitRepository.GetAll();
+        }
+
+        public List<Unit> GetUnites(Expression<Func<Unit, bool>> expression)
+        {
+            return eFUnitRepository.GetAll(expression).ToList();
         }
 
         public void UpdateUnit(Unit unit)

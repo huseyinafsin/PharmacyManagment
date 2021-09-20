@@ -6,41 +6,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccessLayer.Abstract;
+using System.Linq.Expressions;
 
 namespace BusinessLayer.Concrete
 {
     public class BankAccountManager : IBankAccountService
     {
-        EFBankAccountRepository eFBankAccountManager;
+        private readonly IBankAccountDal _bankAccountDal;
 
-        public BankAccountManager()
+        public BankAccountManager(IBankAccountDal bankAccountDal)
         {
-            eFBankAccountManager = new EFBankAccountRepository();
+            _bankAccountDal = bankAccountDal;
         }
 
         public void AddBankAccount(BankAccount bankAccount)
         {
-            _ = eFBankAccountManager.Create(bankAccount);
+            _ = _bankAccountDal.Create(bankAccount);
         }
 
         public void DeleteBankAccount(BankAccount bankAccount)
         {
-            _ = eFBankAccountManager.Delete(bankAccount);
+            _ = _bankAccountDal.Delete(bankAccount);
         }
 
         public BankAccount GetBankAccount(int id)
         {
-           return eFBankAccountManager.GetById(id).Result;
+           return _bankAccountDal.GetById(id).Result;
         }
 
-        public List<BankAccount> GetBankAccounts()
+        public async Task<IQueryable<BankAccount>> GetBankAccounts()
         {
-            return eFBankAccountManager.GetAll().ToList();
+            return await _bankAccountDal.GetAll();
+        }
+
+        public List<BankAccount> GetBankAccounts(Expression<Func<BankAccount, bool>> expression)
+        {
+            return _bankAccountDal.GetAll(expression).ToList();
         }
 
         public void UpdateBankAccount(BankAccount bankAccount)
         {
-            _ = eFBankAccountManager.Update(bankAccount);
+            _ = _bankAccountDal.Update(bankAccount);
         }
     }
 }

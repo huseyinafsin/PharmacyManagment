@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,16 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly CategoryManager _categoryManager;
-        public CategoryController(CategoryManager categoryManager)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryManager)
         {
-            _categoryManager = categoryManager;
+            _categoryService = categoryManager;
         }
 
         // GET: Category
         public IActionResult Index()
         {
-            return View(_categoryManager.GetCategories().ToList());
+            return View(_categoryService.GetCategories().Result.ToList());
         }
 
         // GET: Category/Details/5
@@ -32,7 +33,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var category = _categoryManager.GetCategory(id.Value);
+            var category = _categoryService.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -56,7 +57,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryManager.AddCategory(category);
+                _categoryService.AddCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -70,7 +71,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var category = _categoryManager.GetCategory(id.Value);
+            var category = _categoryService.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -94,7 +95,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _categoryManager.UpdateCategory(category);
+                    _categoryService.UpdateCategory(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,7 +121,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var category = _categoryManager.GetCategory(id.Value);
+            var category = _categoryService.GetCategory(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -134,17 +135,17 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int? id)
         {
-            var category = _categoryManager.GetCategory(id.Value);
+            var category = _categoryService.GetCategory(id.Value);
             if (category != null)
             {
-                _categoryManager.DeleteCategory(category);
+                _categoryService.DeleteCategory(category);
             }
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _categoryManager.GetCategories().Any(e => e.Id == id);
+            return _categoryService.GetCategories().Result.Any(e => e.Id == id);
         }
     }
 }

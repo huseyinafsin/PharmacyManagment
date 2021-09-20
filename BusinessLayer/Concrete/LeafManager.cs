@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,9 +35,14 @@ namespace BusinessLayer.Concrete
             return eFLeafRepository.GetById(id).Result;
         }
 
-        public List<Leaf> GetLeaves()
+        public async Task<IQueryable<Leaf>> GetLeaves()
         {
-            return eFLeafRepository.GetAll().ToList();
+            return await eFLeafRepository.GetAll();
+        }
+
+        public List<Leaf> GetLeaves(Expression<Func<Leaf, bool>> expression)
+        {
+            return eFLeafRepository.GetAll(expression).ToList();
         }
 
         public void UpdateLeaf(Leaf leaf)

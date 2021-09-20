@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,9 +29,9 @@ namespace BusinessLayer.Concrete
             _ = eFCustomerManager.Delete(customer);
         }
 
-        public List<Customer> GetCustomers()
+        public  async Task<IQueryable<Customer>> GetCustomers()
         {
-            return eFCustomerManager.GetAll().ToList();
+            return await eFCustomerManager.GetAll();
         }
 
         public Customer GetCustomer(int id)
@@ -41,6 +42,11 @@ namespace BusinessLayer.Concrete
         public void UpdateCustomer(Customer customer)
         {
             _ = eFCustomerManager.Update(customer);
+        }
+
+        public List<Customer> GetCustomers(Expression<Func<Customer, bool>> expression)
+        {
+            return eFCustomerManager.GetAll(expression).ToList();
         }
     }
 }

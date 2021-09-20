@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,9 +29,14 @@ namespace BusinessLayer.Concrete
             _ = eFCategoryRepository.Delete(category);
         }
 
-        public List<Category> GetCategories()
+        public async Task<IQueryable<Category>> GetCategories()
         {
-            return eFCategoryRepository.GetAll().ToList();
+            return await eFCategoryRepository.GetAll();
+        }
+
+        public List<Category> GetCategories(Expression<Func<Category, bool>> expression)
+        {
+            return eFCategoryRepository.GetAll(expression).ToList();
         }
 
         public Category GetCategory(int id)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface IManufacturerDal:IGenericDal<Manufacturer>
+    public interface IManufacturerDal: IGenericDal<Manufacturer>
     {
         List<Manufacturer> GetManufacturers();
     }

@@ -2,41 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
-using PharmacyManagmentV2.Interfaces;
+
 using PharmacyManagmentV2.Models;
 //23.08.2021- 15.00
 namespace PharmacyManagmentV2.Controllers
 {
     public class UserController : Controller
     {
-        private readonly AppDBContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IGenericRepository<Address> _address;
         private readonly ILogger<UserController> _logger;
+        private readonly AddressManager _addressManager;
 
-        public UserController(AppDBContext context,
+        public UserController(
                             UserManager<ApplicationUser> userManager,
                             SignInManager<ApplicationUser> signInManager,
-                            IGenericRepository<Address> address,
                             RoleManager<ApplicationRole> roleManager,
                             ILogger<UserController> logger)
         {
-            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-            _address = address;
             _roleManager = roleManager;
             _logger = logger;
+            _addressManager = new AddressManager();
         }
 
         // GET: Application/User
@@ -45,7 +41,7 @@ namespace PharmacyManagmentV2.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var appDBContext = _context.ApplicationUsers.Include(a => a.Address);
+            var appDBContext = _userManager.Users.Include(a => a.Address).Where(u=>u.Status==true);
             return View(await appDBContext.ToListAsync());
         }
 
@@ -66,8 +62,8 @@ namespace PharmacyManagmentV2.Controllers
         {
             returnUrl ??= Url.Content("~/");
 
-
-            if (ModelState.IsValid)
+            var _user = await _userManager.FindByEmailAsync(user.Email);
+            if (ModelState.IsValid && _user.Status==true)
             {
                 var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, user.RememberMe, false);
 
@@ -101,7 +97,6 @@ namespace PharmacyManagmentV2.Controllers
             if (ModelState.IsValid)
             {
                
-                await _address.Create(model.Address);
                 var user = new ApplicationUser
                 {
                     FirstName = model.Firtname,
@@ -111,6 +106,7 @@ namespace PharmacyManagmentV2.Controllers
                     PhoneNumber = model.PhoneNumber,
                     UserType = model.UserType,
                     Address = model.Address,
+                    Status = true
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -183,7 +179,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var applicationUser = await _context.ApplicationUsers
+            var applicationUser =_userManager.Users
                 .Include(a => a.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
@@ -204,7 +200,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var user = await _context.ApplicationUsers.FindAsync(id);
+            var user = _userManager.FindByIdAsync(id.Value.ToString()).Result;
             if (user == null)
             {
                 return NotFound();
@@ -216,7 +212,7 @@ namespace PharmacyManagmentV2.Controllers
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Address = _address.GetAll().FirstOrDefault(p=>p.Id==user.AddressId)
+                Address = _addressManager.GetAddress((int)user.AddressId)
             };
             
             return View(model);
@@ -234,14 +230,13 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    var user = await _context.ApplicationUsers.FindAsync(id);
+                    var user = _userManager.FindByIdAsync(id.ToString()).Result;
                     user.FirstName  = model.Firtname;
                     user.LastName = model.LastName;
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Address = model.Address;
                     await _userManager.UpdateAsync(user);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -268,19 +263,19 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var user = await _context.ApplicationUsers.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return NotFound();
             }
-            
+
             var model = new UserViewModel()
             {
-                Firtname =user.FirstName,
+                Firtname = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Address = _address.GetAll().FirstOrDefault(p=>p.Id==user.AddressId)
+                Address = _addressManager.GetAddress((int)user.AddressId)
             };
             
             return View(model);
@@ -298,14 +293,13 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    var user = await _context.ApplicationUsers.FindAsync(id);
+                    var user = await _userManager.FindByIdAsync(id.ToString());
                     user.FirstName = model.Firtname;
                     user.LastName = model.LastName;
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Address = model.Address;
                     await _userManager.UpdateAsync(user);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -332,7 +326,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var applicationUser = await _context.ApplicationUsers
+            var applicationUser = await _userManager.Users.ToList().AsQueryable()
                 .Include(a => a.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (applicationUser == null)
@@ -348,15 +342,16 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var applicationUser = await _context.ApplicationUsers.FindAsync(id);
-            _context.ApplicationUsers.Remove(applicationUser);
-            await _context.SaveChangesAsync();
+            var applicationUser = await _userManager.FindByIdAsync(id.ToString());
+            // await _userManager.DeleteAsync(applicationUser);
+            applicationUser.Status = false;
+            await _userManager.UpdateAsync(applicationUser);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ApplicationUserExists(int id)
         {
-            return _context.ApplicationUsers.Any(e => e.Id == id);
+            return _userManager.Users.Any(e => e.Id == id);
         }
     }
 }

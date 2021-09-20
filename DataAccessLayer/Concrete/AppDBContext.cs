@@ -23,7 +23,7 @@ namespace DataAccessLayer.Concrete
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-KRNCUB4\\SQLEXPRESS;Database=TestPharmacyManagment; Integrated Security=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-KRNCUB4\\SQLEXPRESS;Database=PharmacyManagment;Trusted_Connection=True;MultipleActiveResultSets=true;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

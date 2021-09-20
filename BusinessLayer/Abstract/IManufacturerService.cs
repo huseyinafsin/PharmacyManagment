@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace BusinessLayer.Abstract
         void AddManufacturer(Manufacturer manufacturer);
         void DeleteManufacturer(Manufacturer manufacturer);
         void UpdateManufacturer(Manufacturer manufacturer);
-        List<Manufacturer> GetManufacturers();
+        Task<IQueryable<Manufacturer>> GetManufacturers();
+        List<Manufacturer> GetManufacturers(Expression<Func<Manufacturer, bool>> expression);
         Manufacturer GetManufacturer(int id);
     }
 }

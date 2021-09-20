@@ -1,4 +1,4 @@
-﻿@model PharmacyManagmentV2.Data.Medicine
+﻿@model EntityLayer.Concrete.Medicine
 
 @{
     ViewData["Title"] = "Delete";
@@ -103,10 +103,10 @@
             @Html.DisplayFor(model => model.Purchase.Id)
         </dd class>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sell)
+            @Html.DisplayNameFor(model => model.Invoice)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sell.Id)
+            @Html.DisplayFor(model => model.Invoice.Id)
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatAt)

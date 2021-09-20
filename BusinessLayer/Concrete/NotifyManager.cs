@@ -3,6 +3,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,12 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public List<Notify> GetNotifies()
+        public async Task<IQueryable<Notify>> GetNotifies()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Notify> GetNotifies(Expression<Func<Notify, bool>> expression)
         {
             throw new NotImplementedException();
         }

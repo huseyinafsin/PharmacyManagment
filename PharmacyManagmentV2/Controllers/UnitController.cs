@@ -1,26 +1,26 @@
 ﻿
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PharmacyManagmentV2.Contexts;
-using PharmacyManagmentV2.Data;
+
 
 namespace PharmacyManagmentV2.Controllers
 {
     public class UnitController : Controller
     {
-        private readonly AppDBContext _context;
-
-        public UnitController(AppDBContext context)
+        private readonly UnitManager unitManager;
+        public UnitController()
         {
-            _context = context;
+            unitManager = new UnitManager();
         }
 
         // GET: Unit
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Units.ToListAsync());
+            return View(unitManager.GetUnites());
         }
 
         // GET: Unit/Details/5
@@ -31,8 +31,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = await _context.Units
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var unit = unitManager.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -56,8 +55,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(unit);
-                await _context.SaveChangesAsync();
+                unitManager.AddUnit(unit);
                 return RedirectToAction(nameof(Index));
             }
             return View(unit);
@@ -71,7 +69,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = await _context.Units.FindAsync(id);
+            var unit = unitManager.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -95,8 +93,7 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _context.Update(unit);
-                    await _context.SaveChangesAsync();
+                    unitManager.UpdateUnit(unit);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,8 +119,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = await _context.Units
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var unit = unitManager.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -137,15 +133,13 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var unit = await _context.Units.FindAsync(id);
-            _context.Units.Remove(unit);
-            await _context.SaveChangesAsync();
+            unitManager.DeleteUnit(unitManager.GetUnit(id));
             return RedirectToAction(nameof(Index));
         }
 
         private bool UnitExists(int id)
         {
-            return _context.Units.Any(e => e.Id == id);
+            return unitManager.GetUnites().Result.Any(e => e.Id == id);
         }
     }
 }

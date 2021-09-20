@@ -3,6 +3,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,12 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public List<Invoice> GetInvoices()
+        public async Task<IQueryable<Invoice>> GetInvoices()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Invoice> GetInvoices(Expression<Func<Invoice, bool>> expression)
         {
             throw new NotImplementedException();
         }

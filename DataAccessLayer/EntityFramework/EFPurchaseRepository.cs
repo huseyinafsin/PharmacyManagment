@@ -13,10 +13,6 @@ namespace DataAccessLayer.EntityFramework
     public class EFPurchaseRepository : GenericRepository<Purchase>, IPurchaseDal
     {
 
-        public List<Pharmacy> GetPharmacies()
-        {
-            using var _context = new AppDBContext();
-            throw new NotImplementedException();
-        }
+       
     }
 }
