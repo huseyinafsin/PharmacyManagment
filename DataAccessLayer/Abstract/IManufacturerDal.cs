@@ -9,6 +9,7 @@ namespace DataAccessLayer.Abstract
 {
     public interface IManufacturerDal: IGenericDal<Manufacturer>
     {
-        List<Manufacturer> GetManufacturers();
+        List<Manufacturer> GetManufacturersWithProperties();
+        Manufacturer GetManufacturerWithProperties(int id);
     }
 }

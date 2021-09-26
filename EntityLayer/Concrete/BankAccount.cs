@@ -1,20 +1,16 @@
-﻿using EntityLayer.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 
 namespace EntityLayer.Concrete
 {
-    public class BankAccount:BaseEntity
+    public class BankAccount
     {
-   
+        public int AccoıuntId { get; set; }
         public long AccountNumber { get; set; }
         public string AccountName { get; set; }
-        public string Branch { get; set; }
-        public int Balance { get; set; }
-        public int CreditLine { get; set; }
-        public bool IsTaken { get; set; }
+        public string AccountBranch { get; set; }
+        public int AccountBalance { get; set; }
+        public int AccountCreditLine { get; set; }
+        public bool AccountStatus { get; set; }
 
     }
 }

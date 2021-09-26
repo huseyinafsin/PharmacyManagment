@@ -1,6 +1,5 @@
 ﻿using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
-using EntityLayer.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,32 +9,31 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
 { 
-    public class GenericRepository<T> : IGenericDal<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericDal<T> where T : class
     {
 
        
-        public async Task<T> GetById(int id)
+        public T GetById(int id)
         {
             using var _context = new AppDBContext();
-            return await _context.Set<T>().AsNoTracking()
-                                          .FirstOrDefaultAsync(e => e.Id == id);
+            return _context.Set<T>().Find(id);
         }
 
-        public async Task Create(T obj)
+        public void Create(T obj)
         {
             using var _context = new AppDBContext();
-            await _context.Set<T>().AddAsync(obj);
+            _context.Set<T>().AddAsync(obj);
             _context.SaveChanges();
         }
 
-        public async Task Update(T obj)
+        public void Update(T obj)
         {
             using var _context = new AppDBContext();
             _context.Update(obj);
             _context.SaveChanges();
         }
 
-        public async Task Delete(T obj)
+        public void Delete(T obj)
         {
             using var _context = new AppDBContext();
             _context.Set<T>().Remove(obj);
@@ -43,16 +41,16 @@ namespace DataAccessLayer.Repository
 
         }
 
-        public async Task<IQueryable<T>> GetAll()
+        public List<T> GetAll()
         {
             using var _context = new AppDBContext();
-            return  _context.Set<T>().AsNoTracking();
+            return  _context.Set<T>().ToList();
         }
 
         public List<T> GetAll(Expression<Func<T, bool>> expression)
         {
             using var _context = new AppDBContext();
-          return  _context.Set<T>().Where(expression).ToList();
+            return  _context.Set<T>().Where(expression).ToList();
         }
     }
 }

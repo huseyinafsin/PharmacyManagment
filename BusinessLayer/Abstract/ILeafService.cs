@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddLeaf(Leaf leaf);
         void DeleteLeaf(Leaf leaf);
         void UpdateLeaf(Leaf leaf);
-        Task<IQueryable<Leaf>> GetLeaves();
+        List<Leaf> GetLeaves();
         List<Leaf> GetLeaves(Expression<Func<Leaf, bool>> expression);
         Leaf GetLeaf(int id);
     }

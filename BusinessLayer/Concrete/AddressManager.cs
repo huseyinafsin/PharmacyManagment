@@ -13,41 +13,41 @@ namespace BusinessLayer.Concrete
 {
     public class AddressManager : IAddressService
     {
-        EFAddressRepository eFAddressRepository;
+        IAddressDal _addressDal;
 
-        public AddressManager()
+        public AddressManager(IAddressDal addressDal)
         {
-            eFAddressRepository = new EFAddressRepository();
+            _addressDal = addressDal;
         }
 
         public void AddAddress(Address address)
         {
-            _ = eFAddressRepository.Create(address);
+             _addressDal.Create(address);
         }
 
         public void DeleteAddress(Address address)
         {
-            _ = eFAddressRepository.Delete(address);
+             _addressDal.Delete(address);
         }
 
         public Address GetAddress(int id)
         {
-            return eFAddressRepository.GetById(id).Result;
+            return _addressDal.GetById(id);
         }
 
-        public async Task<IQueryable<Address>> GetAddresses()
+        public List<Address> GetAddresses()
         {
-            return await  eFAddressRepository.GetAll();
+            return  _addressDal.GetAll();
         }
 
         public List<Address> GetAddresses(Expression<Func<Address, bool>> expression)
         {
-            return eFAddressRepository.GetAll(expression).ToList();
+            return _addressDal.GetAll(expression).ToList();
         }
 
         public void UpdateAddress(Address address)
         {
-            _ = eFAddressRepository.Update(address);
+             _addressDal.Update(address);
         }
     }
 }

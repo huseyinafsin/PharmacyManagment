@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,34 +12,39 @@ namespace BusinessLayer.Concrete
 {
     public class InvoiceManager : IInvoiceService
     {
+        IInvoiceDal _invoiceDal;
+        public InvoiceManager(IInvoiceDal invoiceDal)
+        {
+            _invoiceDal = invoiceDal;
+        }
         public void AddInvoice(Invoice invoice)
         {
-            throw new NotImplementedException();
+            _invoiceDal.Create(invoice);
         }
 
         public void DeleteInvoice(Invoice invoice)
         {
-            throw new NotImplementedException();
+            _invoiceDal.Delete(invoice);
         }
 
         public Invoice GetInvoice(int id)
         {
-            throw new NotImplementedException();
+           return _invoiceDal.GetById(id);
         }
 
-        public async Task<IQueryable<Invoice>> GetInvoices()
+        public List<Invoice> GetInvoices()
         {
-            throw new NotImplementedException();
+            return _invoiceDal.GetAll();
         }
 
         public List<Invoice> GetInvoices(Expression<Func<Invoice, bool>> expression)
         {
-            throw new NotImplementedException();
+            return _invoiceDal.GetAll(expression);
         }
 
         public void UpdateInvoice(Invoice invoice)
         {
-            throw new NotImplementedException();
+            _invoiceDal.Update(invoice);
         }
     }
 }

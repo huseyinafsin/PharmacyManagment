@@ -6,6 +6,7 @@ using BusinessLayer.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,17 +32,12 @@ namespace PharmacyManagmentV2.Controllers
             _bankAccountService = bankAccountService;
         }
 
-        // GET: Pharmacy
         public IActionResult Index()
         {
-            var pharmacies = _pharmacyService
-                .GetPharmacies().Result
-                .Include(p => p.BankAccount)
-                .ToList();
+            var pharmacies = _pharmacyService.GetPharmaciesWithBankAccount();
             return View(pharmacies);
         }
 
-        // GET: Pharmacy/Details/5
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -49,9 +45,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var pharmacy = _pharmacyService.GetPharmacies().Result
-                .Include(p => p.BankAccount)
-                .FirstOrDefault(p => p.Id == id);
+            var pharmacy = _pharmacyService.GetPharmaciesWithBankAccount();
             if (pharmacy == null)
             {
                 return NotFound();
@@ -60,15 +54,12 @@ namespace PharmacyManagmentV2.Controllers
             return View(pharmacy);
         }
 
-        // GET: Pharmacy/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Pharmacy/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
@@ -81,7 +72,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(pharmacy);
         }
 
-        // GET: Pharmacy/Edit/5
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -97,14 +87,12 @@ namespace PharmacyManagmentV2.Controllers
             return View(pharmacy);
         }
 
-        // POST: Pharmacy/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Name,Id,CreatAt")] Pharmacy pharmacy)
         {
-            if (id != pharmacy.Id)
+            if (id != pharmacy.PharmacyId)
             {
                 return NotFound();
             }
@@ -117,7 +105,7 @@ namespace PharmacyManagmentV2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PharmacyExists(pharmacy.Id))
+                    if (!PharmacyExists(pharmacy.PharmacyId))
                     {
                         return NotFound();
                     }
@@ -131,7 +119,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(pharmacy);
         }
 
-        // GET: Pharmacy/Delete/5
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -148,7 +135,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(pharmacy);
         }
 
-        // POST: Pharmacy/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -158,20 +144,18 @@ namespace PharmacyManagmentV2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Pharmacy/Users/id
-        // [Authorize(Roles ="User Assign")]
+        [Authorize(Roles ="User Assign")]
         public IActionResult UserAssign(int id)
         {
             var allUsers = _userManager.Users.ToList();
-            var pharmacyUsers = _pharmacyService.GetUsers(id).Select(I => I.Id);
+            var pharmacyUsers = _pharmacyService;
             var assignUsers = new List<SetUserViewModel>();
 
             allUsers.ForEach(user => assignUsers.Add(new SetUserViewModel
             {
                 HasAssign = pharmacyUsers.Contains(user.Id),
                 UserId = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName
+                
             }));
             return View(assignUsers);
         }
@@ -217,7 +201,7 @@ namespace PharmacyManagmentV2.Controllers
                 .Include(p => p.BankAccount)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            var bankAccount = _bankAccountService.GetBankAccount( model.Id);
+            var bankAccount = _bankAccountService.GetBankAccount( model.AccoıuntId);
             bankAccount.IsTaken = true;
             var lastAccount = pharmacy.BankAccount;
             lastAccount.IsTaken = false;
@@ -230,7 +214,8 @@ namespace PharmacyManagmentV2.Controllers
         }
         private bool PharmacyExists(int id)
         {
-            return _pharmacyService.GetPharmacies().Result.Any(e => e.Id == id);
+            return _pharmacyService.GetPharmacy(id) != null ? true : false;
+
         }
     }
 }

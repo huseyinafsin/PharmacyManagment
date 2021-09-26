@@ -13,8 +13,10 @@ namespace BusinessLayer.Abstract
         void AddMedicine(Medicine medicine);
         void DeleteMedicine(Medicine medicine);
         void UpdateMedicine(Medicine medicine);
-        Task<IQueryable<Medicine>> GetMedicines();
+        List<Medicine> GetMedicines();
+        List<Medicine> GetMedicinesWithProperties();
         List<Medicine> GetMedicines(Expression<Func<Medicine, bool>> expression);
         Medicine GetMedicine(int id);
+        Medicine GetMedicineWithProperties(int id);
     }
 }

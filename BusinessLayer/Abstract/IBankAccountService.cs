@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddBankAccount(BankAccount bankAccount);
         void DeleteBankAccount(BankAccount bankAccount);
         void UpdateBankAccount(BankAccount bankAccount);
-        Task<IQueryable<BankAccount>> GetBankAccounts();
+        List<BankAccount> GetBankAccounts();
         List<BankAccount> GetBankAccounts(Expression<Func<BankAccount, bool>> expression);
         BankAccount GetBankAccount(int id);
     }

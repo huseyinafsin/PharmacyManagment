@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using EntityLayer.Abstract;
 
 #nullable disable
 
 namespace EntityLayer.Concrete
 {
-    public partial class Unit : BaseEntity
+    public partial class Unit 
     {
-        public Unit()
-        {
-            Medicines = new HashSet<Medicine>();
-        }
-
-      
-        public string Name { get; set; }
+        public int UnitId { get; set; }
+        public string UnitName { get; set; }
+        public bool UnitStatus { get; set; }
 
         public virtual ICollection<Medicine> Medicines { get; set; }
     }

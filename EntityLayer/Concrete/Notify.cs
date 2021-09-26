@@ -1,14 +1,16 @@
-﻿using EntityLayer.Abstract;
+﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
 {
-    public class Notify: BaseEntity
+    public class Notify
     {
+        public int NotifyId { get; set; }
         public string Message { get; set; }
+        public DateTime MessageDate { get; set; }
+        public int SenderId { get; set; }
+        public int ReceiverId { get; set; }
+        public bool MessageStatus { get; set; }
 
     }
 }

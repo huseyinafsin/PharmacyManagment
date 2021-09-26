@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
@@ -12,41 +13,46 @@ namespace BusinessLayer.Concrete
 {
     public class CustomerManager : ICustomerService
     {
-        EFCustomerRepository eFCustomerManager;
+        ICustomerDal _customerDal;
 
-        public CustomerManager()
+        public CustomerManager(ICustomerDal customerDal)
         {
-            eFCustomerManager = new EFCustomerRepository();
+            _customerDal = customerDal;
         }
 
         public void AddCustomer(Customer customer)
         {
-            _ = eFCustomerManager.Create(customer);
+            _customerDal.Create(customer);
         }
 
         public void DeleteCustomer(Customer customer)
         {
-            _ = eFCustomerManager.Delete(customer);
+            _customerDal.Delete(customer);
         }
 
-        public  async Task<IQueryable<Customer>> GetCustomers()
+        public  List<Customer> GetCustomers()
         {
-            return await eFCustomerManager.GetAll();
+            return  _customerDal.GetAll();
         }
 
         public Customer GetCustomer(int id)
         {
-            return eFCustomerManager.GetById(id).Result;
+            return _customerDal.GetById(id);
         }
 
         public void UpdateCustomer(Customer customer)
         {
-            _ = eFCustomerManager.Update(customer);
+            _customerDal.Update(customer);
         }
 
         public List<Customer> GetCustomers(Expression<Func<Customer, bool>> expression)
         {
-            return eFCustomerManager.GetAll(expression).ToList();
+            return _customerDal.GetAll(expression).ToList();
+        }
+
+        public List<Customer> GetCustomersWithAddress()
+        {
+           return _customerDal.GetCustomersWithAddress();
         }
     }
 }

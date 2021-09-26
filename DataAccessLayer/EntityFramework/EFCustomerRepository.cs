@@ -15,10 +15,11 @@ namespace DataAccessLayer.EntityFramework
     {
        
 
-        public List<Customer> GetCustomers()
+        public List<Customer> GetCustomersWithAddress()
         {
-            using var _context = new AppDBContext();
-            return _context.Customers.Include(b => b.BankAccount).ToList();
+            using var c = new AppDBContext();
+            return c.Customers.Include(x => x.Address).ToList();
+          
         }
     }
 }

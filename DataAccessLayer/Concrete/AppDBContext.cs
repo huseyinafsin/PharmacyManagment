@@ -37,7 +37,7 @@ namespace DataAccessLayer.Concrete
         public virtual DbSet<Leaf> Leaves { get; set; }
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public virtual DbSet<Medicine> Medicines { get; set; }
-        public virtual DbSet<MedicineType> MedicineTypes { get; set; }
+        public virtual DbSet<MedicineType> Types { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<Invoice> Sells { get; set; }
         public virtual DbSet<Unit> Units { get; set; }

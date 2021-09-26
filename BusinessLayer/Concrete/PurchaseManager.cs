@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
@@ -13,41 +14,41 @@ namespace BusinessLayer.Concrete
     public class PurchaseManager : IPurchaseService
     {
 
-        EFPurchaseRepository eFPurchaseRepository;
+        IPurchaseDal _purchaseDal;
 
-        public PurchaseManager()
+        public PurchaseManager(IPurchaseDal purchaseDal)
         {
-            eFPurchaseRepository = new EFPurchaseRepository();
+            _purchaseDal = purchaseDal;
         }
 
         public void AddPurchase(Purchase purchase)
         {
-            _ = eFPurchaseRepository.Create(purchase);
+             _purchaseDal.Create(purchase);
         }
 
         public void DeletePurchase(Purchase purchase)
         {
-            _ = eFPurchaseRepository.Delete(purchase);
+            _purchaseDal.Delete(purchase);
         }
 
         public Purchase GetPurchase(int id)
         {
-            return eFPurchaseRepository.GetById(id).Result;
+            return _purchaseDal.GetById(id);
         }
 
-        public async Task<IQueryable<Purchase>> GetPurchases()
+        public List<Purchase> GetPurchases()
         {
-            return await eFPurchaseRepository.GetAll();
+            return _purchaseDal.GetAll();
         }
 
         public List<Purchase> GetPurchases(Expression<Func<Purchase, bool>> expression)
         {
-            return eFPurchaseRepository.GetAll(expression).ToList();
+            return _purchaseDal.GetAll(expression).ToList();
         }
 
         public void UpdatePurchase(Purchase purchase)
         {
-            _ = eFPurchaseRepository.Update(purchase);
+            _purchaseDal.Update(purchase);
         }
     }
 }

@@ -29,8 +29,7 @@ namespace PharmacyManagmentV2.Controllers
         [Authorize(Roles = "List Customers")]
         public IActionResult Index()
         {
-            var customers =_customerService.GetCustomers().Result
-                .Include(c => c.Address).ToList();
+            var customers = _customerService.GetCustomersWithAddress();
             return View(customers);
 
         }
@@ -46,10 +45,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var customer = await _customerService
-                .GetCustomers().Result
-                .Include(c => c.Address)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = _customerService
+                .GetCustomersWithAddress().FirstOrDefault(x=>x.CustomerId==id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -96,9 +93,7 @@ namespace PharmacyManagmentV2.Controllers
 
             //var customer = await _context.Customers.FindAsync(id);
             var customer = _customerService
-                .GetCustomers().Result
-                .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id == id).Result;
+                .GetCustomersWithAddress().FirstOrDefault(x => x.CustomerId == id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -113,7 +108,7 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Customer customer)
         {
-            if (id != customer.Id)
+            if (id != customer.CustomerId)
             {
                 return NotFound();
             }
@@ -126,7 +121,7 @@ namespace PharmacyManagmentV2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!CustomerExists(customer.CustomerId))
                     {
                         return NotFound();
                     }
@@ -150,10 +145,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var customer =_customerService
-                .GetCustomers().Result
-                .Include(c => c.Address)
-                .FirstOrDefaultAsync(m => m.Id == id).Result;
+            var customer = _customerService
+                 .GetCustomersWithAddress().FirstOrDefault(x => x.CustomerId == id.Value); ;
             if (customer == null)
             {
                 return NotFound();
@@ -168,19 +161,17 @@ namespace PharmacyManagmentV2.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
 
-            var customer =_customerService
-                .GetCustomers().Result
-                .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id == id).Result;
+            var customer = _customerService
+                .GetCustomersWithAddress().FirstOrDefault(x =>x.CustomerId==id);
 
-           _customerService.DeleteCustomer(customer);
+            _customerService.DeleteCustomer(customer);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return _customerService.GetCustomers().Result.Any(e => e.Id == id);
+            return _customerService.GetCustomer(id) != null ? true : false;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using BusinessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
+using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
@@ -12,41 +12,46 @@ namespace BusinessLayer.Concrete
 {
     public class ManufacturerManager : IManufacturerService
     {
-        EFManufacturerRepository eFManufacturerRepository;
+        IManufacturerDal _manufacturerDal;
 
-        public ManufacturerManager()
+        public ManufacturerManager(IManufacturerDal manufacturerDal)
         {
-            eFManufacturerRepository = new EFManufacturerRepository();
+            _manufacturerDal = manufacturerDal;
         }
 
         public void AddManufacturer(Manufacturer manufacturer)
         {
-            _ = eFManufacturerRepository.Create(manufacturer);
+            _manufacturerDal.Create(manufacturer);
         }
 
         public void DeleteManufacturer(Manufacturer manufacturer)
         {
-            _ = eFManufacturerRepository.Delete(manufacturer);
+            _manufacturerDal.Delete(manufacturer);
         }
 
-        public Manufacturer GetManufacturer(int id)
+        public List<Manufacturer> GetManufacturers()
         {
-            return eFManufacturerRepository.GetById(id).Result;
-        }
-
-        public async Task<IQueryable<Manufacturer>> GetManufacturers()
-        {
-            return await  eFManufacturerRepository.GetAll();
+           return _manufacturerDal.GetAll();
         }
 
         public List<Manufacturer> GetManufacturers(Expression<Func<Manufacturer, bool>> expression)
         {
-            return eFManufacturerRepository.GetAll(expression).ToList();
+            return _manufacturerDal.GetAll(expression);
+        }
+
+        public List<Manufacturer> GetManufacturersWithProperties()
+        {
+            return _manufacturerDal.GetManufacturersWithProperties();
+        }
+
+        public Manufacturer GetManufacturerWithPropeties(int id)
+        {
+            return _manufacturerDal.GetManufacturerWithProperties(id);
         }
 
         public void UpdateManufacturer(Manufacturer manufacturer)
         {
-            _ = eFManufacturerRepository.Update(manufacturer);
+            return _manufacturerDal.Update(manufacturer);
         }
     }
 }

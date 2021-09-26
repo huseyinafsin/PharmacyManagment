@@ -13,9 +13,8 @@ namespace BusinessLayer.Abstract
         void AddAddress(Address address);
         void DeleteAddress(Address address);
         void UpdateAddress(Address address);
-        Task<IQueryable<Address>> GetAddresses();
+        List<Address> GetAddresses();
         List<Address> GetAddresses(Expression<Func<Address, bool>> expression);
-
         Address GetAddress(int id);
     }
 } 

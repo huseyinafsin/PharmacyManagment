@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
@@ -12,17 +13,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PharmacyManagmentV2.Controllers
 {
-    public class MedicineTypeController : Controller
+    public class TypeController : Controller
     {
-        private readonly MedicineTypeManager _medicineTypeManager;
-        public MedicineTypeController()
+        ITypeService _typeService;
+        
+        public TypeController(ITypeService typeService)
         {
+            _typeService = typeService;
         }
 
         // GET: MedicineType
         public IActionResult Index()
         {
-            return View(_medicineTypeManager.GetMedicineTypes());
+            return View(_typeService.GetTypes());
         }
 
         // GET: MedicineType/Details/5
@@ -33,7 +36,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
+            var medicineType = _typeService.GetType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -42,28 +45,24 @@ namespace PharmacyManagmentV2.Controllers
             return View(medicineType);
         }
 
-        // GET: MedicineType/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MedicineType/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
         {
             if (ModelState.IsValid)
             {
-                _medicineTypeManager.AddMedicineType(medicineType);
+                _typeService.AddType(medicineType);
                 return RedirectToAction(nameof(Index));
             }
             return View(medicineType);
         }
 
-        // GET: MedicineType/Edit/5
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -71,7 +70,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
+            var medicineType = _typeService.GetType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -79,14 +78,12 @@ namespace PharmacyManagmentV2.Controllers
             return View(medicineType);
         }
 
-        // POST: MedicineType/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Name,Status,Id,CreatAt")] MedicineType medicineType)
         {
-            if (id != medicineType.Id)
+            if (id != medicineType.TypeId)
             {
                 return NotFound();
             }
@@ -95,11 +92,11 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _medicineTypeManager.AddMedicineType(medicineType);
+                    _typeService.AddType(medicineType);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MedicineTypeExists(medicineType.Id))
+                    if (!MedicineTypeExists(medicineType.TypeId))
                     {
                         return NotFound();
                     }
@@ -113,7 +110,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(medicineType);
         }
 
-        // GET: MedicineType/Delete/5
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -121,7 +117,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var medicineType = _medicineTypeManager.GetMedicineType(id.Value);
+            var medicineType = _typeService.GetType(id.Value);
             if (medicineType == null)
             {
                 return NotFound();
@@ -130,22 +126,21 @@ namespace PharmacyManagmentV2.Controllers
             return View(medicineType);
         }
 
-        // POST: MedicineType/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var medicineType = _medicineTypeManager.GetMedicineType(id);
+            var medicineType = _typeService.GetType(id);
             if (medicineType!=null)
             {
-                _medicineTypeManager.DeleteMedicineType(medicineType);
+                _typeService.DeleteType(medicineType);
             }
             return RedirectToAction(nameof(Index));
         }
 
         private bool MedicineTypeExists(int id)
         {
-            return _medicineTypeManager.GetMedicineTypes().Result.Any(e => e.Id == id);
+            return _typeService.GetType(id) != null ? true : false;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
@@ -15,24 +16,21 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class ManufacturerController : Controller
     {
-        private readonly ManufacturerManager _manufacturerManager;
+        private readonly IManufacturerService _manufacturerService;
 
-        public ManufacturerController( ManufacturerManager manufacturerManager)
+        public ManufacturerController( IManufacturerService manufacturerService)
         {
-            _manufacturerManager = manufacturerManager;
+            _manufacturerService = manufacturerService;
         }
 
-        // GET: Application/Manufacturer
         [Authorize(Roles = "List Manufacturer")]
         public IActionResult Index()
         {
-            var manufacturers = _manufacturerManager
-                .GetManufacturers().Result
-                .Include(m => m.Address).ToList();
+            var manufacturers = _manufacturerService
+                .GetManufacturers();
             return View(manufacturers);
         }
 
-        // GET: Application/Manufacturer/Details/5
         [Authorize(Roles = "Manufacturer Details")]
         public IActionResult Details(int? id)
         {
@@ -41,10 +39,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var manufacturer = _manufacturerManager
-                .GetManufacturers().Result
-                .Include(m => m.Address)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var manufacturer = _manufacturerService
+                .GetManufacturerWithPropeties(id.Value);
             if (manufacturer == null)
             {
                 return NotFound();
@@ -53,7 +49,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(manufacturer);
         }
 
-        // GET: Application/Manufacturer/Create
         [HttpGet]
         [Authorize(Roles = "Create Manufacturer")]
         public IActionResult Create()
@@ -62,23 +57,20 @@ namespace PharmacyManagmentV2.Controllers
             return View();
         }
 
-        // POST: Application/Manufacturer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Manufacturer manufacturer)
         {
             if (ModelState.IsValid)
             {
-                _manufacturerManager.AddManufacturer(manufacturer);
+                _manufacturerService.AddManufacturer(manufacturer);
 
                 return RedirectToAction(nameof(Index));
             }
             return View(manufacturer);
         }
 
-        // GET: Application/Manufacturer/Edit/5
         [HttpGet]
         [Authorize(Roles = "Edit Manufacturer")]
         public async Task<IActionResult> Edit(int? id)
@@ -88,10 +80,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var manufacturer = await _manufacturerManager
-                .GetManufacturers().Result
-                .Include(c=>c.Address)
-                .FirstOrDefaultAsync(c=>c.Id==id);
+            var manufacturer = _manufacturerService.GetManufacturersWithProperties();
             if (manufacturer == null)
             {
                 return NotFound();
@@ -99,14 +88,12 @@ namespace PharmacyManagmentV2.Controllers
             return View(manufacturer);
         }
 
-        // POST: Application/Manufacturer/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Manufacturer manufacturer)
         {
-            if (id != manufacturer.Id)
+            if (id != manufacturer.ManufacturerId)
             {
                 return NotFound();
             }
@@ -115,11 +102,11 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    _manufacturerManager.UpdateManufacturer(manufacturer);
+                    _manufacturerService.UpdateManufacturer(manufacturer);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ManufacturerExists(manufacturer.Id))
+                    if (!ManufacturerExists(manufacturer.ManufacturerId))
                     {
                         return NotFound();
                     }
@@ -133,7 +120,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(manufacturer);
         }
 
-        // GET: Application/Manufacturer/Delete/5
         [HttpGet]
         [Authorize(Roles ="Delete Manufacturer")]
         public async Task<IActionResult> Delete(int? id)
@@ -143,11 +129,8 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var manufacturer = await _manufacturerManager
-                .GetManufacturers().Result
-                .AsQueryable()
-                .Include(m => m.Address)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var manufacturer = _manufacturerService
+                .GetManufacturerWithPropeties(id.Value);
             if (manufacturer == null)
             {
                 return NotFound();
@@ -156,24 +139,21 @@ namespace PharmacyManagmentV2.Controllers
             return View(manufacturer);
         }
 
-        // POST: Application/Manufacturer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var manufacturer = await _manufacturerManager
-                .GetManufacturers().Result
-                .Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.Id == id);
+            var manufacturer = _manufacturerService
+                .GetManufacturerWithPropeties(id);
 
-            _manufacturerManager.DeleteManufacturer(manufacturer);
+            _manufacturerService.DeleteManufacturer(manufacturer);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool ManufacturerExists(int id)
         {
-            return _manufacturerManager.GetManufacturers().Result.Any(e => e.Id == id);
+            return _manufacturerService.GetManufacturerWithPropeties(id) != null ? true : false;
         }
     }
 }

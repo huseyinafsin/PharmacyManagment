@@ -10,12 +10,8 @@ namespace PharmacyManagmentV2.Models
     public class RegisterViewModel
     {
         [Required]
-        public string Firtname { get; set; }
+        public string Username { get; set; }
 
-        [Required]
-        public string LastName { get; set; }
-
-        
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -33,7 +29,7 @@ namespace PharmacyManagmentV2.Models
         public string ConfirmPassword { get; set; }
         
         [Required]
-        public string UserType { get; set; }
+        public int UserType { get; set; }
 
 
         public Address Address { get; set; }

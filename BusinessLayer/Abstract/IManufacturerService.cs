@@ -13,8 +13,9 @@ namespace BusinessLayer.Abstract
         void AddManufacturer(Manufacturer manufacturer);
         void DeleteManufacturer(Manufacturer manufacturer);
         void UpdateManufacturer(Manufacturer manufacturer);
-        Task<IQueryable<Manufacturer>> GetManufacturers();
+        List<Manufacturer> GetManufacturers();
+        List<Manufacturer> GetManufacturersWithProperties();
         List<Manufacturer> GetManufacturers(Expression<Func<Manufacturer, bool>> expression);
-        Manufacturer GetManufacturer(int id);
+        Manufacturer GetManufacturerWithPropeties(int id);
     }
 }

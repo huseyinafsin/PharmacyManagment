@@ -6,7 +6,7 @@ using EntityLayer.Concrete;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface IMedicineTypeDal:IGenericDal<MedicineType>
+    public interface ITypeDal:IGenericDal<MedicineType>
     {
     }
 }

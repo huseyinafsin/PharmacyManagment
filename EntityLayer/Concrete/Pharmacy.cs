@@ -1,20 +1,17 @@
-﻿using EntityLayer.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EntityLayer.Concrete
 {
-    public class Pharmacy : BaseEntity
+    public class Pharmacy
     {
-        public Pharmacy()
-        {
-            Medicines = new HashSet<Medicine>();
-            ApplicationUsers = new HashSet<ApplicationUser>();
-        }
 
-        public  string Name { get; set; }
+
+        public int PharmacyId { get; set; }
+        public string PharmacyName { get; set; }
+        public int BankAccountId { get; set; }
         public virtual BankAccount BankAccount { get; set; }
 
         public virtual ICollection<Medicine> Medicines { get; set; }

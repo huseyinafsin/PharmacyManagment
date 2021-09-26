@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddInvoice(Invoice invoice);
         void DeleteInvoice(Invoice invoice);
         void UpdateInvoice(Invoice invoice);
-        Task<IQueryable<Invoice>>  GetInvoices();
+        List<Invoice>  GetInvoices();
         List<Invoice> GetInvoices(Expression<Func<Invoice, bool>> expression);
         Invoice GetInvoice(int id);
     }

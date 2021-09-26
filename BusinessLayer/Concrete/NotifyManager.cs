@@ -41,5 +41,10 @@ namespace BusinessLayer.Concrete
         {
             throw new NotImplementedException();
         }
+
+        List<Notify> INotifyService.GetNotifies()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,8 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.EntityFramework
 {
-    public class EFCategoryRepository : GenericRepository<Category>, ICategoryDal
+    public class EFTypeRepository : GenericRepository<MedicineType>, ITypeDal
     {
-     
+        public void Delete(Func<int, MedicineType> getMedicineType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,14 +14,14 @@ namespace PharmacyManagmentV2.Controllers
     public class PurchaseController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ManufacturerManager _manufacturerManager;
+        private readonly ManufacturerService _manufacturerManager;
         private readonly PharmcyManager _pharmcyManager;
 
 
         public PurchaseController(
                                    PharmcyManager pharmcyManager,
                                    UserManager<ApplicationUser> userManager,
-                                   ManufacturerManager manufacturerManager
+                                   ManufacturerService manufacturerManager
                                    )
 
         {

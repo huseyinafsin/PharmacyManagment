@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
@@ -15,97 +16,46 @@ namespace BusinessLayer.Concrete
 {
     public class PharmcyManager : IPharmacyService
     {
-        private readonly EFPharmacyRepository eFPharmacyRepository;
+        IPharmacyDal _pharmacyDal;
 
-        public PharmcyManager()
+        public PharmcyManager(IPharmacyDal pharmacyDal)
         {
-            eFPharmacyRepository = new EFPharmacyRepository();
+            _pharmacyDal = pharmacyDal;
         }
 
         public void AddPharmacy(Pharmacy pharmacy)
         {
-            _ = eFPharmacyRepository.Create(pharmacy);
+            _pharmacyDal.Create(pharmacy);
         }
 
         public void DeletePharmacy(Pharmacy pharmacy)
         {
-            _ = eFPharmacyRepository.Delete(pharmacy);
+            _pharmacyDal.Delete(pharmacy);
         }
 
-        public async Task<IQueryable<Pharmacy>> GetPharmacies()
+        public List<Pharmacy> GetPharmacies()
         {
-            return await eFPharmacyRepository.GetAll();
+            return _pharmacyDal.GetAll();
         }
 
         public List<Pharmacy> GetPharmacies(Expression<Func<Pharmacy, bool>> expression)
         {
-            return eFPharmacyRepository.GetAll(expression).ToList();
+            return _pharmacyDal.GetAll(expression);
+        }
+
+        public List<Pharmacy> GetPharmaciesWithBankAccount()
+        {
+            return _pharmacyDal.GetPharmaciesWithBankAccount();
         }
 
         public Pharmacy GetPharmacy(int id)
         {
-            return eFPharmacyRepository.GetById(id).Result;
+            return _pharmacyDal.GetById(id);
         }
 
         public void UpdatePharmacy(Pharmacy pharmacy)
         {
-            _ = eFPharmacyRepository.Update(pharmacy);
+            _pharmacyDal.Update(pharmacy);
         }
-
-
-
-      
-    
-   
-        public List<ApplicationUser> GetUsers(int id)
-        {
-            var users = eFPharmacyRepository
-                .GetAll().Result
-                .Include(u => u.ApplicationUsers)
-                .FirstOrDefaultAsync(u => u.Id == id).Result.ApplicationUsers.ToList();
-
-            return users;
-        }
-
-       public void AssignUser(int pharmacyId, int appUserID)
-        {
-            using var context = new AppDBContext();
-
-            var users = eFPharmacyRepository
-                .GetAll().Result
-                .Include(u => u.ApplicationUsers)
-                .FirstOrDefaultAsync(u => u.Id == pharmacyId).Result.ApplicationUsers.ToList();
-
-            var user = context.ApplicationUsers.FirstOrDefault(u => u.Id == appUserID);
-
-            bool isExit = users.Contains(user);
-
-            if (isExit == false)
-            {
-                context.Pharmacies.Include(u => u.ApplicationUsers)
-                        .FirstOrDefault(p => p.Id == pharmacyId).ApplicationUsers.Add(user);
-                context.SaveChanges();
-            }
-        }
-
-       public void RemoveUser(int pharmacyId, int appUserID)
-        {
-            using var _context = new AppDBContext();
-            var users = eFPharmacyRepository
-                .GetAll().Result
-                .Include(u => u.ApplicationUsers)
-                .FirstOrDefaultAsync(u => u.Id == pharmacyId).Result.ApplicationUsers.ToList();
-            var user = _context.ApplicationUsers.FirstOrDefault(u => u.Id == appUserID);
-
-            bool isExit = users.Contains(user);
-
-            if (isExit == true)
-            {
-                _context.Pharmacies.Include(u => u.ApplicationUsers)
-                        .FirstOrDefault(p => p.Id == pharmacyId).ApplicationUsers.Remove(user);
-                _context.SaveChanges();
-            }
-        }
-
     }
 }

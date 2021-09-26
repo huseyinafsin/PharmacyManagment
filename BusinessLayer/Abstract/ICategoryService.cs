@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddCategory(Category category);
         void DeleteCategory(Category category);
         void UpdateCategory(Category category);
-        Task<IQueryable<Category>> GetCategories();
+        List<Category> GetCategories();
         List<Category> GetCategories(Expression<Func<Category, bool>> expression);
         Category GetCategory(int id);
     }

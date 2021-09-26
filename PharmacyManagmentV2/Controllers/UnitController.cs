@@ -1,6 +1,7 @@
 ﻿
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,16 @@ namespace PharmacyManagmentV2.Controllers
 {
     public class UnitController : Controller
     {
-        private readonly UnitManager unitManager;
-        public UnitController()
+        private readonly IUnitService _unitService;
+        public UnitController(IUnitService unitService)
         {
-            unitManager = new UnitManager();
+            _unitService = unitService;
         }
 
         // GET: Unit
         public async Task<IActionResult> Index()
         {
-            return View(unitManager.GetUnites());
+            return View(_unitService.GetUnites());
         }
 
         // GET: Unit/Details/5
@@ -31,7 +32,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = unitManager.GetUnit(id.Value);
+            var unit = _unitService.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -55,7 +56,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                unitManager.AddUnit(unit);
+                _unitService.AddUnit(unit);
                 return RedirectToAction(nameof(Index));
             }
             return View(unit);
@@ -69,7 +70,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = unitManager.GetUnit(id.Value);
+            var unit = _unitService.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -84,7 +85,7 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Status,Id,CreatAt")] Unit unit)
         {
-            if (id != unit.Id)
+            if (id != unit.UnitId)
             {
                 return NotFound();
             }
@@ -93,11 +94,11 @@ namespace PharmacyManagmentV2.Controllers
             {
                 try
                 {
-                    unitManager.UpdateUnit(unit);
+                    _unitService.UpdateUnit(unit);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UnitExists(unit.Id))
+                    if (!UnitExists(unit.UnitId))
                     {
                         return NotFound();
                     }
@@ -119,7 +120,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var unit = unitManager.GetUnit(id.Value);
+            var unit = _unitService.GetUnit(id.Value);
             if (unit == null)
             {
                 return NotFound();
@@ -133,13 +134,13 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            unitManager.DeleteUnit(unitManager.GetUnit(id));
+            _unitService.DeleteUnit(_unitService.GetUnit(id));
             return RedirectToAction(nameof(Index));
         }
 
         private bool UnitExists(int id)
         {
-            return unitManager.GetUnites().Result.Any(e => e.Id == id);
+            return _unitService.GetUnit(id) != null ? true : false;
         }
     }
 }

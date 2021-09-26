@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddUnit(Unit unit);
         void DeleteUnit(Unit unit);
         void UpdateUnit(Unit unit);
-        Task<IQueryable<Unit>> GetUnites();
+        List<Unit> GetUnites();
         List<Unit> GetUnites(Expression<Func<Unit, bool>> expression);
         Unit GetUnit(int id);
     }

@@ -13,8 +13,10 @@ namespace BusinessLayer.Abstract
         void AddCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
         void UpdateCustomer(Customer customer);
-        Task<IQueryable<Customer>> GetCustomers();
+        List<Customer> GetCustomers();
         List<Customer> GetCustomers(Expression<Func<Customer, bool>> expression);
         Customer GetCustomer(int id);
+
+        List<Customer> GetCustomersWithAddress();
     }
 }

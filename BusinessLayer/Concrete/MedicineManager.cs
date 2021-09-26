@@ -13,41 +13,55 @@ namespace BusinessLayer.Concrete
 {
     public class MedicineManager : IMedicineService
     {
-        EFMedicineRepository eFMedicineRepository;
+        IMedicineDal _medicineDal;
 
-        public MedicineManager()
+        public MedicineManager(IMedicineDal medicineDal)
         {
-            eFMedicineRepository = new EFMedicineRepository();
+            _medicineDal = medicineDal;
         }
 
         public void AddMedicine(Medicine medicine)
         {
-            _ = eFMedicineRepository.Create(medicine);
+            _medicineDal.Create(medicine);
         }
 
         public void DeleteMedicine(Medicine medicine)
         {
-            _ = eFMedicineRepository.Delete(medicine);
+            _medicineDal.Delete(medicine);
         }
 
         public Medicine GetMedicine(int id)
         {
-            return eFMedicineRepository.GetById(id).Result;
+            return _medicineDal.GetById(id);
         }
 
-        public async Task<IQueryable<Medicine>> GetMedicines()
+        public List<Medicine> GetMedicines()
         {
-            return await eFMedicineRepository.GetAll();
+            return _medicineDal.GetAll();
         }
 
         public List<Medicine> GetMedicines(Expression<Func<Medicine, bool>> expression)
         {
-            return eFMedicineRepository.GetAll(expression).ToList();
+            return _medicineDal.GetAll(expression);
+        } 
+        public List<Medicine> GetMedicinesWithProperties(Expression<Func<Medicine, bool>> expression)
+        {
+            return _medicineDal.GetMedicinesWithProperties();
+        }
+
+        public List<Medicine> GetMedicinesWithProperties()
+        {
+            return _medicineDal.GetMedicinesWithProperties();
+        }
+
+        public Medicine GetMedicineWithProperties(int id)
+        {
+            return _medicineDal.GetMedicinewithProperties(id);
         }
 
         public void UpdateMedicine(Medicine medicine)
         {
-            _ = eFMedicineRepository.Update(medicine);
+            _medicineDal.Update(medicine);
         }
     }
 }

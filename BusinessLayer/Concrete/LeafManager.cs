@@ -13,41 +13,41 @@ namespace BusinessLayer.Concrete
     public class LeafManager : ILeafService
     {
 
-        EFLeafRepository eFLeafRepository;
+        IleafDal _leadDal;
 
-        public LeafManager()
+        public LeafManager(IleafDal ileafDal)
         {
-            eFLeafRepository = new EFLeafRepository();
+            _leadDal = ileafDal;
         }
 
         public void AddLeaf(Leaf leaf)
         {
-            _ = eFLeafRepository.Create(leaf);
+             _leadDal.Create(leaf);
         }
 
         public void DeleteLeaf(Leaf leaf)
         {
-            _ = eFLeafRepository.Delete(leaf);
+            _leadDal.Delete(leaf);
         }
 
         public Leaf GetLeaf(int id)
         {
-            return eFLeafRepository.GetById(id).Result;
+            return _leadDal.GetById(id);
         }
 
-        public async Task<IQueryable<Leaf>> GetLeaves()
+        public List<Leaf> GetLeaves()
         {
-            return await eFLeafRepository.GetAll();
+            return _leadDal.GetAll();
         }
 
         public List<Leaf> GetLeaves(Expression<Func<Leaf, bool>> expression)
         {
-            return eFLeafRepository.GetAll(expression).ToList();
+            return _leadDal.GetAll(expression);
         }
 
         public void UpdateLeaf(Leaf leaf)
         {
-            _ = eFLeafRepository.Update(leaf);
+            _leadDal.Update(leaf);
         }
     }
 }

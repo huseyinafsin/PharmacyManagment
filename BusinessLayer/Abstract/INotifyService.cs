@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddNotify(Notify notify);
         void DeleteNotify(Notify notify);
         void UpdateNotify(Notify notify);
-        Task<IQueryable<Notify>> GetNotifies();
+        List<Notify> GetNotifies();
         List<Notify> GetNotifies(Expression<Func<Notify, bool>> expression);
         Notify GetNotify(int id);
     }

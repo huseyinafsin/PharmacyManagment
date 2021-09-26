@@ -10,43 +10,43 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class CategoryManager : Abstract.ICategoryService
     {
-        EFCategoryRepository eFCategoryRepository;
+        ICategoryDal _categoryDal;
 
-        public CategoryManager()
+        public CategoryManager(ICategoryDal categoryDal)
         {
-            eFCategoryRepository = new EFCategoryRepository();
+            _categoryDal = categoryDal;
         }
 
         public void AddCategory(Category category)
         {
-            _ = eFCategoryRepository.Create(category);
+            _categoryDal.Create(category);
         }
 
         public void DeleteCategory(Category category)
         {
-            _ = eFCategoryRepository.Delete(category);
+             _categoryDal.Delete(category);
         }
 
-        public async Task<IQueryable<Category>> GetCategories()
+        public List<Category> GetCategories()
         {
-            return await eFCategoryRepository.GetAll();
+            return _categoryDal.GetAll();
         }
 
         public List<Category> GetCategories(Expression<Func<Category, bool>> expression)
         {
-            return eFCategoryRepository.GetAll(expression).ToList();
+            return _categoryDal.GetAll(expression).ToList();
         }
 
         public Category GetCategory(int id)
         {
-            return eFCategoryRepository.GetById(id).Result;
+            return _categoryDal.GetById(id);
         }
 
         public void UpdateCategory(Category category)
         {
-            _ = eFCategoryRepository.Update(category);
+            _categoryDal.Update(category);
         }
     }
 }

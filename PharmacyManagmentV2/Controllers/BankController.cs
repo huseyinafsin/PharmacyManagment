@@ -22,7 +22,7 @@ namespace PharmacyManagmentV2.Controllers
         // GET: BankAccounts
         public IActionResult Index()
         {
-            return View(_bankAccountService.GetBankAccounts().Result.Where(b=>b.Status==true).ToList());
+            return View(_bankAccountService.GetBankAccounts(b => b.AccountStatus == true));
         }
 
         // GET: BankAccounts/Details/5
@@ -33,7 +33,7 @@ namespace PharmacyManagmentV2.Controllers
                 return NotFound();
             }
 
-            var bankAccount = _bankAccountService.GetBankAccounts().Result.FirstOrDefault(b => b.Id == id);
+            var bankAccount = _bankAccountService.GetBankAccounts();
             if (bankAccount == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace PharmacyManagmentV2.Controllers
         {
             if (ModelState.IsValid)
             {
-                bankAccount.Status = true;
+                bankAccount.AccountStatus = true;
                 _bankAccountService.AddBankAccount(bankAccount);
                 return RedirectToAction(nameof(Index));
             }
@@ -87,7 +87,7 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("AccountNumber,AccountName,Branch,Balance,CreditLine,Id,CreatAt")] BankAccount bankAccount)
         {
-            if (id != bankAccount.Id)
+            if (id != bankAccount.AccoıuntId)
             {
                 return NotFound();
             }
@@ -100,7 +100,7 @@ namespace PharmacyManagmentV2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BankAccountExists(bankAccount.Id))
+                    if (!BankAccountExists(bankAccount.AccoıuntId))
                     {
                         return NotFound();
                     }
@@ -139,14 +139,14 @@ namespace PharmacyManagmentV2.Controllers
         {
             var bankAccount = _bankAccountService.GetBankAccount(id.Value);
             //  _bankAccountManager.DeleteBankAccount(bankAccount);
-            bankAccount.Status = false;
+            bankAccount.AccountStatus = false;
             _bankAccountService.UpdateBankAccount(bankAccount);
             return RedirectToAction(nameof(Index));
         }
 
         private bool BankAccountExists(int id)
         {
-            return _bankAccountService.GetBankAccounts().Result.Any(e => e.Id == id &&(e.Status==true)) ;
+            return _bankAccountService.GetBankAccount(id) != null ? true : false;
         }
     }
 }

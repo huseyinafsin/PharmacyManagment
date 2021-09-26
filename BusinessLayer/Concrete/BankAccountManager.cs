@@ -22,22 +22,22 @@ namespace BusinessLayer.Concrete
 
         public void AddBankAccount(BankAccount bankAccount)
         {
-            _ = _bankAccountDal.Create(bankAccount);
+            _bankAccountDal.Create(bankAccount);
         }
 
         public void DeleteBankAccount(BankAccount bankAccount)
         {
-            _ = _bankAccountDal.Delete(bankAccount);
+            _bankAccountDal.Delete(bankAccount);
         }
 
         public BankAccount GetBankAccount(int id)
         {
-           return _bankAccountDal.GetById(id).Result;
+           return _bankAccountDal.GetById(id);
         }
 
-        public async Task<IQueryable<BankAccount>> GetBankAccounts()
+        public List<BankAccount> GetBankAccounts()
         {
-            return await _bankAccountDal.GetAll();
+            return _bankAccountDal.GetAll();
         }
 
         public List<BankAccount> GetBankAccounts(Expression<Func<BankAccount, bool>> expression)
@@ -47,7 +47,7 @@ namespace BusinessLayer.Concrete
 
         public void UpdateBankAccount(BankAccount bankAccount)
         {
-            _ = _bankAccountDal.Update(bankAccount);
+            _bankAccountDal.Update(bankAccount);
         }
     }
 }

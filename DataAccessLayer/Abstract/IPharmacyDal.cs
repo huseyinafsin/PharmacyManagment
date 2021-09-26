@@ -7,7 +7,8 @@ namespace DataAccessLayer.Abstract
     public interface IPharmacyDal : IGenericDal<Pharmacy>
     {
 
-       
+        List<Pharmacy> GetPharmaciesWithBankAccount();   
+        List<Pharmacy> GetPharmaciesWithUsers();   
 
 
     }

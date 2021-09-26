@@ -32,7 +32,6 @@ namespace PharmacyManagmentV2.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
-            _addressManager = new AddressManager();
         }
 
         // GET: Application/User
@@ -41,7 +40,7 @@ namespace PharmacyManagmentV2.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var appDBContext = _userManager.Users.Include(a => a.Address).Where(u=>u.Status==true);
+            var appDBContext = _userManager.Users.Include(a => a.Address).Where(u=>u.UserStatus==true);
             return View(await appDBContext.ToListAsync());
         }
 
@@ -63,7 +62,7 @@ namespace PharmacyManagmentV2.Controllers
             returnUrl ??= Url.Content("~/");
 
             var _user = await _userManager.FindByEmailAsync(user.Email);
-            if (ModelState.IsValid && _user.Status==true)
+            if (ModelState.IsValid && _user.UserStatus==true)
             {
                 var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, user.RememberMe, false);
 
@@ -96,17 +95,16 @@ namespace PharmacyManagmentV2.Controllers
 
             if (ModelState.IsValid)
             {
-               
+
                 var user = new ApplicationUser
                 {
-                    FirstName = model.Firtname,
-                    LastName = model.LastName,
+
+                    UserName = model.Username,
                     Email = model.Email,
-                    UserName = model.Email,
                     PhoneNumber = model.PhoneNumber,
                     UserType = model.UserType,
                     Address = model.Address,
-                    Status = true
+                    UserStatus = true
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -117,34 +115,19 @@ namespace PharmacyManagmentV2.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    var  assignRoles = new List<ApplicationRole>();
-                    var roleNames = new List<string>();
                    
-                    if (model.UserType == "Administor")
+                    if (model.UserType == 1)
                     {
-                        assignRoles = _roleManager.Roles.ToList();
+                       await _userManager.AddToRoleAsync(user, "Admin");
                     }
-                    else if (model.UserType=="Employee")
+                    else if (model.UserType==2)
                     {
-                        roleNames.Add("List Customers");
-                        roleNames.Add("Customer Details");
-                        roleNames.Add("Home Page");
-                        roleNames.Add("List Manufacturer");
+                       await _userManager.AddToRoleAsync(user, "Employee");
                     }
                     else{
-                        roleNames.Add("List Customers");
-                        roleNames.Add("Customer Details");
-                        roleNames.Add("Home Page");
+                       await _userManager.AddToRoleAsync(user, "Advisor");
                     }
-
-                    foreach (var role in roleNames)
-                        assignRoles.Add(new ApplicationRole { Name = role });
-
-                    foreach (var role in assignRoles)
-                    {
-                        await _userManager.AddToRoleAsync(user, role.Name);
-                    }
-
+                  
 
                     return LocalRedirect(returnUrl);
 
@@ -208,8 +191,7 @@ namespace PharmacyManagmentV2.Controllers
             
             var model = new UserViewModel()
             {
-                Firtname =user.FirstName,
-                LastName = user.LastName,
+                UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Address = _addressManager.GetAddress((int)user.AddressId)
@@ -218,9 +200,7 @@ namespace PharmacyManagmentV2.Controllers
             return View(model);
         }
 
-        // POST: Application/User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(int id, UserViewModel model)
@@ -231,8 +211,7 @@ namespace PharmacyManagmentV2.Controllers
                 try
                 {
                     var user = _userManager.FindByIdAsync(id.ToString()).Result;
-                    user.FirstName  = model.Firtname;
-                    user.LastName = model.LastName;
+                    user.UserName = model.UserName;
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Address = model.Address;
@@ -254,7 +233,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(model);
         }
             
-        // GET: Application/User/Profile/5
         [Authorize(Roles = "Profile")]
         public async Task<IActionResult> Profile(int? id)
         {
@@ -271,8 +249,7 @@ namespace PharmacyManagmentV2.Controllers
 
             var model = new UserViewModel()
             {
-                Firtname = user.FirstName,
-                LastName = user.LastName,
+                UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Address = _addressManager.GetAddress((int)user.AddressId)
@@ -281,9 +258,7 @@ namespace PharmacyManagmentV2.Controllers
             return View(model);
         }
 
-        // POST: Application/User/Profile/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profile(int id, UserViewModel model)
@@ -294,8 +269,7 @@ namespace PharmacyManagmentV2.Controllers
                 try
                 {
                     var user = await _userManager.FindByIdAsync(id.ToString());
-                    user.FirstName = model.Firtname;
-                    user.LastName = model.LastName;
+                    user.UserName = model.UserName;
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     user.Address = model.Address;
@@ -317,7 +291,6 @@ namespace PharmacyManagmentV2.Controllers
             return View(model);
         }
 
-        // GET: Application/User/Delete/5
         [Authorize(Roles ="Delete User")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -337,14 +310,12 @@ namespace PharmacyManagmentV2.Controllers
             return View(applicationUser);
         }
 
-        // POST: Application/User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var applicationUser = await _userManager.FindByIdAsync(id.ToString());
-            // await _userManager.DeleteAsync(applicationUser);
-            applicationUser.Status = false;
+            applicationUser.UserStatus = false;
             await _userManager.UpdateAsync(applicationUser);
             return RedirectToAction(nameof(Index));
         }

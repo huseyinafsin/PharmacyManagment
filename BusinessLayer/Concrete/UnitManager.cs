@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
@@ -13,41 +14,41 @@ namespace BusinessLayer.Concrete
     public class UnitManager : IUnitService
     {
 
-        EFUnitRepository eFUnitRepository;
+        IUnitDal _unitDal;
 
-        public UnitManager()
+        public UnitManager(IUnitDal unitDal)
         {
-            eFUnitRepository = new EFUnitRepository();
+            _unitDal = unitDal;
         }
 
         public void AddUnit(Unit unit)
         {
-            _ = eFUnitRepository.Create(unit);
+            _unitDal.Create(unit);
         }
 
         public void DeleteUnit(Unit unit)
         {
-            _ = eFUnitRepository.Delete(unit);
+            _unitDal.Delete(unit);
         }
 
         public Unit GetUnit(int id)
         {
-            return eFUnitRepository.GetById(id).Result;
+            return _unitDal.GetById(id);
         }
 
-        public async Task<IQueryable<Unit>> GetUnites()
+        public List<Unit> GetUnites()
         {
-            return await eFUnitRepository.GetAll();
+            return _unitDal.GetAll();
         }
 
         public List<Unit> GetUnites(Expression<Func<Unit, bool>> expression)
         {
-            return eFUnitRepository.GetAll(expression).ToList();
+            return _unitDal.GetAll(expression);
         }
 
         public void UpdateUnit(Unit unit)
         {
-            _ = eFUnitRepository.Update(unit);
+             _unitDal.Update(unit);
         }
     }
 }

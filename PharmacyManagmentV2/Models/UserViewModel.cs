@@ -10,12 +10,9 @@ namespace PharmacyManagmentV2.Models
 {
     public class UserViewModel
     {
-        [Required]
-        public string Firtname { get; set; }
 
         [Required]
-        public string LastName { get; set; }
-
+        public string UserName { get; set; }
 
         [Required]
         [EmailAddress]

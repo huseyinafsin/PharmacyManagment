@@ -13,7 +13,7 @@ namespace BusinessLayer.Abstract
         void AddPurchase(Purchase purchase);
         void DeletePurchase(Purchase purchase);
         void UpdatePurchase(Purchase purchase);
-       Task<IQueryable<Purchase>> GetPurchases();
+        List<Purchase> GetPurchases();
         List<Purchase> GetPurchases(Expression<Func<Purchase, bool>> expression);
         Purchase GetPurchase(int id);
     }

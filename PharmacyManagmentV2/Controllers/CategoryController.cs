@@ -22,7 +22,7 @@ namespace PharmacyManagmentV2.Controllers
         // GET: Category
         public IActionResult Index()
         {
-            return View(_categoryService.GetCategories().Result.ToList());
+            return View(_categoryService.GetCategories());
         }
 
         // GET: Category/Details/5
@@ -86,7 +86,7 @@ namespace PharmacyManagmentV2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Name,Status,Id,CreatAt")] Category category)
         {
-            if (id != category.Id)
+            if (id != category.CategoryId)
             {
                 return NotFound();
             }
@@ -99,7 +99,7 @@ namespace PharmacyManagmentV2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!CategoryExists(category.CategoryId))
                     {
                         return NotFound();
                     }
@@ -145,7 +145,8 @@ namespace PharmacyManagmentV2.Controllers
 
         private bool CategoryExists(int id)
         {
-            return _categoryService.GetCategories().Result.Any(e => e.Id == id);
+            return _categoryService.GetCategory(id) != null ? true : false;
+
         }
     }
 }
