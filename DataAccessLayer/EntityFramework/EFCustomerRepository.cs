@@ -17,7 +17,7 @@ namespace DataAccessLayer.EntityFramework
 
         public List<Customer> GetCustomersWithAddress()
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
             return c.Customers.Include(x => x.Address).ToList();
           
         }

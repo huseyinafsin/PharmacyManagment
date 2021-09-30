@@ -1,331 +1,106 @@
-﻿<!-- Sidebar -->
-<div class="sidebar accent-dark" >
-    <!-- Sidebar user panel (optional) -->
-    <!-- Brand Logo -->
-    <a href="#" class="brand-link">
-        <img src="~/images/logo.png" alt="Pharmacy Managment V2" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Pharmacy Managment</span>
-    </a>
-
-    <!-- SidearSearch Form -->
-    <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn btn-sidebar">
-                    <i class="fas fa-search fa-fw"></i>
-                </button>
+﻿ <!-- Sidenav -->
+<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+        <!-- Brand -->
+        <div class="sidenav-header  align-items-center">
+            <a class="navbar-brand" href="javascript:void(0)">
+                <img src="assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+            </a>
+        </div>
+        <div class="navbar-inner">
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+                <!-- Nav items -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="examples/dashboard.html">
+                            <i class="ni ni-tv-2 text-primary"></i>
+                            <span class="nav-link-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/icons.html">
+                            <i class="ni ni-planet text-orange"></i>
+                            <span class="nav-link-text">Icons</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/map.html">
+                            <i class="ni ni-pin-3 text-primary"></i>
+                            <span class="nav-link-text">Google</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/profile.html">
+                            <i class="ni ni-single-02 text-yellow"></i>
+                            <span class="nav-link-text">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/tables.html">
+                            <i class="ni ni-bullet-list-67 text-default"></i>
+                            <span class="nav-link-text">Tables</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/login.html">
+                            <i class="ni ni-key-25 text-info"></i>
+                            <span class="nav-link-text">Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/register.html">
+                            <i class="ni ni-circle-08 text-pink"></i>
+                            <span class="nav-link-text">Register</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="examples/upgrade.html">
+                            <i class="ni ni-send text-dark"></i>
+                            <span class="nav-link-text">Upgrade</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Divider -->
+                <hr class="my-3">
+                <!-- Heading -->
+                <h6 class="navbar-heading p-0 text-muted">
+                    <span class="docs-normal">Documentation</span>
+                </h6>
+                <!-- Navigation -->
+                <ul class="navbar-nav mb-md-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html" target="_blank">
+                            <i class="ni ni-spaceship"></i>
+                            <span class="nav-link-text">Getting started</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html" target="_blank">
+                            <i class="ni ni-palette"></i>
+                            <span class="nav-link-text">Foundation</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html" target="_blank">
+                            <i class="ni ni-ui-04"></i>
+                            <span class="nav-link-text">Components</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/plugins/charts.html" target="_blank">
+                            <i class="ni ni-chart-pie-35"></i>
+                            <span class="nav-link-text">Plugins</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active active-pro" href="examples/upgrade.html">
+                            <i class="ni ni-send text-dark"></i>
+                            <span class="nav-link-text">Upgrade to PRO</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-            <!-- Dashboard-->
-            <li class="nav-item">
-                <a href="@Url.Action("Index","Home")" class="nav-link active">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                        Dashboard
-                    </p>
-                </a>
-            </li>
-            <!-- Customer options-->
-            <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>
-                        Customer Options
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Customer")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Customer List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Customer")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Add Customer</p>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-            <!-- Medicine options-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-pills"></i>
-                    <p>
-                        Medicine Options
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Medicine")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Medicine List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Medicine")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Add Medicine</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Category")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Category List</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Category")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p> Add Category</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Unit")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Unit List</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Unit")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p> Add Unit</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","MedicineType")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Type List</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","MedicineType")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p> Add Type</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","MedicineType")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Leaf List</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Leaf")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p> Add Leaf</p>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-            <!-- Manufacture options-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-building"></i>
-                    <p>
-                        Manufacturer Options
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Manufacturer")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Manufacturer List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Manufacturer")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Add Manufacturer</p>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-            <!-- Purchase-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-shopping-cart"></i>
-                    <p>
-                        Purchase
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Purchase")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Purchase List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Purchase")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Add Purchase</p>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-            <!-- Invoince-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-hand-holding-usd"></i>
-                    <p>
-                        Invoince
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Sales")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Sales List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Create","Sales")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Create Invoince</p>
-                        </a>
-                    </li>
-
-
-                </ul>
-            </li>
-            <!-- User options-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-user-shield"></i>
-                    <p>
-                        User Options
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","User")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>User List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Register","User")" class="nav-link">
-                            <i class="fas fa-circle"></i>
-                            <p>Add User</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="@Url.Action("Edit","User")" class="nav-link">
-                            <i class="fas fa-user-edit"></i>
-                            <p>Edit Users</p>
-                        </a>
-                    </li>
-
-                </ul>
-            </li>
-            <!-- Admin options-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-tools"></i>
-                    <p>
-                        Admin Options
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("UserRoles","Admin")" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>User Roles</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <!-- Pharmacy options-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-clinic-medical"></i>
-                    <p>
-                        Pharmacy
-                        <i class="fas fa-angle-left right"></i>
-
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Pharmacy")" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Pharmacy List</p>
-                        </a>
-                        <a href="@Url.Action("Create","Pharmacy")" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Add Pharmacy</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <!-- Bank Option-->
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-landmark"></i>
-                    <p>
-                        Bank
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-
-                    <li class="nav-item">
-                        <a href="@Url.Action("Index","Bank")" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Accounts</p>
-                        </a>
-                        <a href="@Url.Action("Create","Bank")" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Add Account</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-        </ul>
-    </nav>
-    <!-- /.sidebar-menu -->
-</div>
-<!-- /.sidebar -->
+</nav>

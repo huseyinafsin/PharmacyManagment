@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
@@ -13,9 +14,9 @@ namespace BusinessLayer.Concrete
     public class LeafManager : ILeafService
     {
 
-        IleafDal _leadDal;
+        ILeafDal _leadDal;
 
-        public LeafManager(IleafDal ileafDal)
+        public LeafManager(ILeafDal ileafDal)
         {
             _leadDal = ileafDal;
         }

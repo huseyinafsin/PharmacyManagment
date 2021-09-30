@@ -10,5 +10,5 @@ namespace DataAccessLayer.Abstract
     public interface IBankAccountDal : IGenericDal<BankAccount>
     {
      
-    }
+    }   
 }

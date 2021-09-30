@@ -58,30 +58,30 @@ namespace PharmacyManagmentV2
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
 
-            services.AddScoped<IAddressDal, IAddressDal>();
-            services.AddScoped<ICategoryDal, ICategoryDal>();
-            services.AddScoped<ICustomerDal, EFCustomerRepository>();
-            services.AddScoped<ILeafDal, IleafDal>();
-            services.AddScoped<IManufacturerDal, IManufacturerDal>();
-            services.AddScoped<IMedicineDal, EFMedicineRepository>();
-            services.AddScoped<ITypeDal, EFTypeRepository>();
-            services.AddScoped<IPurchaseDal, EFPurchaseRepository>();
-            services.AddScoped<IInvoiceDal, EFInvoiceRepository>();
-            services.AddScoped<IPharmacyDal, EFPharmacyRepository>();
-            services.AddScoped<IBankAccountDal, EFBankAccountRepository>();
-            services.AddScoped(typeof(IGenericDal<>),typeof(GenericRepository <>));
+            //services.AddScoped<IAddressDal, IAddressDal>();
+            //services.AddScoped<ICategoryDal, ICategoryDal>();
+            //services.AddScoped<ICustomerDal, EFCustomerRepository>();
+            //services.AddScoped<ILeafDal, EFLeafRepository>();
+            //services.AddScoped<IManufacturerDal, IManufacturerDal>();
+            //services.AddScoped<IMedicineDal, EFMedicineRepository>();
+            //services.AddScoped<ITypeDal, EFTypeRepository>();
+            //services.AddScoped<IPurchaseDal, EFPurchaseRepository>();
+            //services.AddScoped<IInvoiceDal, EFInvoiceRepository>();
+            //services.AddScoped<IPharmacyDal, EFPharmacyRepository>();
+            //services.AddScoped<IBankAccountDal, EFBankAccountRepository>();
+            //services.AddScoped(typeof(IGenericDal<>),typeof(GenericRepository <>));
 
-            services.AddScoped<IAddressService, AddressManager>();
-            services.AddScoped<ICategoryService, ICategoryService>();
-            services.AddScoped<ICustomerService, CustomerManager>();
-            services.AddScoped<ILeafService, LeafManager>();
-            services.AddScoped<IManufacturerService, ManufacturerService>();
-            services.AddScoped<IMedicineService, MedicineManager>();
-            services.AddScoped<ITypeService, TypeManager>();
-            services.AddScoped<IPurchaseService, PurchaseManager>();
-            services.AddScoped<IInvoiceService, InvoiceManager>();
-            services.AddScoped<IPharmacyService, PharmcyManager>();
-            services.AddScoped<IBankAccountService, BankAccountManager>();
+            //services.AddScoped<IAddressService, AddressManager>();
+            //services.AddScoped<ICategoryService, ICategoryService>();
+            //services.AddScoped<ICustomerService, CustomerManager>();
+            //services.AddScoped<ILeafService, LeafManager>();
+            //services.AddScoped<IManufacturerService, ManufacturerManager>();
+            //services.AddScoped<IMedicineService, MedicineManager>();
+            //services.AddScoped<ITypeService, TypeManager>();
+            //services.AddScoped<IPurchaseService, PurchaseManager>();
+            //services.AddScoped<IInvoiceService, InvoiceManager>();
+            //services.AddScoped<IPharmacyService, PharmcyManager>();
+            //services.AddScoped<IBankAccountService, BankAccountManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

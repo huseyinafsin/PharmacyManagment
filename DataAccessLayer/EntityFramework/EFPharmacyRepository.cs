@@ -15,14 +15,14 @@ namespace DataAccessLayer.EntityFramework
     {
         public List<Pharmacy> GetPharmaciesWithBankAccount()
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
 
             return c.Pharmacies.Include(x => x.BankAccount).ToList();
         }
 
         public List<Pharmacy> GetPharmaciesWithUsers()
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
             return c.Pharmacies.Include(x => x.ApplicationUsers).ToList();
         }
     }

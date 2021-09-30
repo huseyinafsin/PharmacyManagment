@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@ namespace EntityLayer.Concrete
 {
     public partial class Leaf
     {
-
+        [Key]
         public int LeafId { get; set; }
         public string LeafName { get; set; }
         public int TotalNumberPerBox { get; set; }

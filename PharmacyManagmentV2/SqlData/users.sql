@@ -1,4 +1,0 @@
-use PharmacyManagment;
-SET IDENTITY_INSERT [dbo].[AspNetUsers] ON
-INSERT INTO [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [Email], [PhoneNumber], [UserType], [AddressId], [PharmacyId], [CreatAt], [UserName], [NormalizedUserName], [NormalizedEmail], [EmailConfirmed], [PasswordHash], [SecurityStamp], [ConcurrencyStamp], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount]) VALUES (1, N'admin', N'admin', N'admin@mail.com', N'admin@mail.', N'Administor', 1, NULL, N'2021-09-09 17:00:57', N'admin@mail.com', N'ADMIN@MAIL.COM', N'ADMIN@MAIL.COM', 0, N'AQAAAAEAACcQAAAAEH2FWVXEzrM60R1XNkIKeuh5gcM0CH7i6h0Oi4+fDr8WvpGcXIx+oWcR3TsVJINGMg==', N'FCWXCRHY5BWO5ZYY4VYCMIYAANRH4UFP', N'216f8a09-6746-451d-b4bb-75adf5adb4a2', 0, 0, NULL, 1, 0)
-SET IDENTITY_INSERT [dbo].[AspNetUsers] OFF

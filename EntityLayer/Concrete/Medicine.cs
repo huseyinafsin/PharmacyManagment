@@ -9,6 +9,7 @@ namespace EntityLayer.Concrete
 {
     public partial class Medicine 
     {
+        [Key]
         public int MedicineId { get; set; }
         public string MedicineName { get; set; }
         public string GenericName { get; set; }
@@ -28,6 +29,7 @@ namespace EntityLayer.Concrete
         public virtual MedicineType Type { get; set; }
         public int UnitId { get; set; }
         public virtual Unit Unit { get; set; }
+        public string MedicineImage { get; set; }
         public bool MedicineStatus { get; set; }
 
 

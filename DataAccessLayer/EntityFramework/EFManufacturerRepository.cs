@@ -16,7 +16,7 @@ namespace DataAccessLayer.EntityFramework
 
         public List<Manufacturer> GetManufacturersWithProperties()
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
             return c.Manufacturers
                 .Include(x => x.Address)
                 .Include(X=>X.BankAccount)
@@ -27,7 +27,7 @@ namespace DataAccessLayer.EntityFramework
 
         public Manufacturer GetManufacturerWithProperties(int id)
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
             return c.Manufacturers
                 .Include(x => x.Address)
                 .Include(X => X.BankAccount)

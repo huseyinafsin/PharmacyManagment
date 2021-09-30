@@ -51,7 +51,7 @@ namespace BusinessLayer.Concrete
 
         public void UpdateManufacturer(Manufacturer manufacturer)
         {
-            return _manufacturerDal.Update(manufacturer);
+             _manufacturerDal.Update(manufacturer);
         }
     }
 }

@@ -15,27 +15,27 @@ namespace DataAccessLayer.Repository
        
         public T GetById(int id)
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             return _context.Set<T>().Find(id);
         }
 
         public void Create(T obj)
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             _context.Set<T>().AddAsync(obj);
             _context.SaveChanges();
         }
 
         public void Update(T obj)
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             _context.Update(obj);
             _context.SaveChanges();
         }
 
         public void Delete(T obj)
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             _context.Set<T>().Remove(obj);
             _context.SaveChanges();
 
@@ -43,13 +43,13 @@ namespace DataAccessLayer.Repository
 
         public List<T> GetAll()
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             return  _context.Set<T>().ToList();
         }
 
         public List<T> GetAll(Expression<Func<T, bool>> expression)
         {
-            using var _context = new AppDBContext();
+            using var _context = new Context();
             return  _context.Set<T>().Where(expression).ToList();
         }
     }

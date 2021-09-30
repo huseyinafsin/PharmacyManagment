@@ -1,0 +1,144 @@
+﻿@model List<EntityLayer.Concrete.Customer>
+@{
+    ViewData["Title"] = "CustomerList";
+    Layout = "_Layout";
+}
+<div class="card-header border-0">
+    <h3 class="mb-0">Customers</h3>
+</div>
+<div class="table-responsive">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" class="sort" data-sort="name">Name</th>
+                    <th scope="col" class="sort" data-sort="budget">Email</th>
+                    <th scope="col" class="sort" data-sort="status">Status</th>
+                    <th scope="col" class="sort" data-sort="completion">Phone</th>
+                    <th scope="col" class="sort" data-sort="status">Date of Bird</th>
+                    <th scope="col" class="sort" data-sort="completion">City</th>
+                    <th scope="col" class="sort" data-sort="completion">Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">
+                            <div class="media align-items-center">
+                                <a href="#" class="avatar rounded-circle mr-3">
+                                    <img alt="Image placeholder" src="@item.CustomerImage">
+                                </a>
+                                <div class="media-body">
+                                    <span class="name mb-0 text-sm">@item.CustomerName</span>
+                                </div>
+                            </div>
+                        </th>
+                        <td class="budget">
+                            @item.CustomerEmail
+                        </td>
+                        <td>
+                            <span class="badge badge-dot mr-4">
+                                @if (item.CustomerStatus)
+                                {
+                                    <i class="bg-success"></i>
+                                    <span class="status">Active Customer</span>
+                                }
+                                else
+                                {
+                                    <i class="bg-danger"></i>
+                                    <span class="status">Deleted Customer</span>
+                                }
+                            </span>
+                        </td>
+                        <td class="budget">
+                            @item.CustomerPhone
+                        </td>
+                        <td class="budget date">
+                            @item.DateofBird
+                        </td>
+                        <td class="budget">
+                            @item.Address.City
+                        </td>
+                        <td class="budget">
+                            @item.Address.State
+                        </td>
+                        <td class="text-right">
+                            <div class="dropdown">
+                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            <a href="#" class="avatar rounded-circle mr-3">
+                                <img alt="Image placeholder" src="~/assets/img/theme/vue.jpg">
+                            </a>
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">Vue Paper UI Kit PRO</span>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="budget">
+                        $2200 USD
+                    </td>
+                    <td>
+                        <span class="badge badge-dot mr-4">
+                            <i class="bg-success"></i>
+                            <span class="status">completed</span>
+                        </span>
+                    </td>
+                    <td>
+                        <div class="avatar-group">
+                            <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                                <img alt="Image placeholder" src="~/assets/img/theme/team-1.jpg">
+                            </a>
+                            <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                                <img alt="Image placeholder" src="~/assets/img/theme/team-2.jpg">
+                            </a>
+                            <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                                <img alt="Image placeholder" src="~/assets/img/theme/team-3.jpg">
+                            </a>
+                            <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                                <img alt="Image placeholder" src="~/assets/img/theme/team-4.jpg">
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="completion mr-2">100%</span>
+                            <div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+

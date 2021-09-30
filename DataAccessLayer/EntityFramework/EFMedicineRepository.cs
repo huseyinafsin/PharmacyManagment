@@ -15,7 +15,7 @@ namespace DataAccessLayer.EntityFramework
     {
         public List<Medicine> GetMedicinesWithProperties()
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
 
             return c.Medicines
                 .Include(x => x.Category)
@@ -29,7 +29,7 @@ namespace DataAccessLayer.EntityFramework
 
         public Medicine GetMedicinewithProperties(int id)
         {
-            using var c = new AppDBContext();
+            using var c = new Context();
 
             return c.Medicines
                 .Include(x => x.Category)
