@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concrete
 {
-    public class Context : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public class PharmacyManagmentContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

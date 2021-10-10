@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.Abstract;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface IUnitDal : IGenericDal<Unit>
+    public interface IUnitDal : IEntityRepository<Unit>
     {
     }
 }

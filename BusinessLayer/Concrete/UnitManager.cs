@@ -1,54 +1,54 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class UnitManager : IUnitService
     {
 
-        IUnitDal _unitDal;
+        private  readonly IUnitDal _unitDal;
 
         public UnitManager(IUnitDal unitDal)
         {
             _unitDal = unitDal;
         }
 
-        public void AddUnit(Unit unit)
+        public IResult AddUnit(Unit unit)
         {
-            _unitDal.Create(unit);
+            _unitDal.Add(unit);
+            return new SuccessResult(Messages.UnitAdded);
         }
 
-        public void DeleteUnit(Unit unit)
+        public IResult DeleteUnit(Unit unit)
         {
             _unitDal.Delete(unit);
+            return new SuccessResult(Messages.UnitDeleted);
         }
 
-        public Unit GetUnit(int id)
+
+        public IDataResult<Unit> GetUnit(int id)
         {
-            return _unitDal.GetById(id);
+            return new SuccessDataResult<Unit>( _unitDal.Get(x=>x.UnitId==id), Messages.UnitFetched);
         }
 
-        public List<Unit> GetUnites()
+
+        public IDataResult<List<Unit>> GetUnites(Expression<Func<Unit, bool>> expression)
         {
-            return _unitDal.GetAll();
+            return new SuccessDataResult<List<Unit>>( _unitDal.GetAll(expression), Messages.UnitListed);
         }
 
-        public List<Unit> GetUnites(Expression<Func<Unit, bool>> expression)
-        {
-            return _unitDal.GetAll(expression);
-        }
 
-        public void UpdateUnit(Unit unit)
+        public IResult UpdateUnit(Unit unit)
         {
              _unitDal.Update(unit);
+             return new SuccessResult(Messages.UnitUpdated);
         }
     }
 }

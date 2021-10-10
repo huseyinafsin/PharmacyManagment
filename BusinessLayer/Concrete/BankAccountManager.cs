@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Abstract;
 using System.Linq.Expressions;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
@@ -20,34 +23,34 @@ namespace BusinessLayer.Concrete
             _bankAccountDal = bankAccountDal;
         }
 
-        public void AddBankAccount(BankAccount bankAccount)
+        public IResult AddBankAccount(BankAccount bankAccount)
         {
-            _bankAccountDal.Create(bankAccount);
+            _bankAccountDal.Add(bankAccount);
+            return new SuccessResult(Messages.BankAccountAdded);
         }
 
-        public void DeleteBankAccount(BankAccount bankAccount)
+        public IResult DeleteBankAccount(BankAccount bankAccount)
         {
             _bankAccountDal.Delete(bankAccount);
+            return new SuccessResult(Messages.BankAccountDeleted);
         }
 
-        public BankAccount GetBankAccount(int id)
+        public IDataResult<BankAccount> GetBankAccount(int id)
         {
-           return _bankAccountDal.GetById(id);
+           return new SuccessDataResult<BankAccount>(_bankAccountDal.Get(x=>x.AccoıuntId==id),Messages.BankAccountFetched);
         }
 
-        public List<BankAccount> GetBankAccounts()
+  
+        public IDataResult<List<BankAccount>> GetBankAccounts(Expression<Func<BankAccount, bool>> expression)
         {
-            return _bankAccountDal.GetAll();
+            return new SuccessDataResult<List<BankAccount>>(_bankAccountDal.GetAll(expression),Messages.BankAccountListed);
         }
 
-        public List<BankAccount> GetBankAccounts(Expression<Func<BankAccount, bool>> expression)
-        {
-            return _bankAccountDal.GetAll(expression).ToList();
-        }
 
-        public void UpdateBankAccount(BankAccount bankAccount)
+        public IResult UpdateBankAccount(BankAccount bankAccount)
         {
             _bankAccountDal.Update(bankAccount);
+            return new SuccessResult(Messages.BankAccountUpdated);
         }
     }
 }

@@ -31,9 +31,12 @@ namespace WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddTransient<IAddressService, AddressManager>();
             services.AddTransient<ICustomerService, CustomerManager>();
 
-            services.AddTransient<ICustomerDal, EFCustomerRepository>();
+            services.AddTransient<IAddressDal, EfAddressRepository>();
+            services.AddTransient<ICustomerDal, EfCustomerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +62,7 @@ namespace WebUI
 
             app.UseEndpoints(endpoints =>
             {
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

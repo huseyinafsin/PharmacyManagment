@@ -6,45 +6,46 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class NotifyManager : INotifyService
     {
+       // INotifyDal not implemented
 
-        public void AddNotify(Notify notify)
+        public IResult AddNotify(Notify notify)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteNotify(Notify notify)
+        public IResult DeleteNotify(Notify notify)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IQueryable<Notify>> GetNotifies()
+
+
+        public IDataResult<List<Notify>> GetNotifies(Expression<Func<Notify, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public List<Notify> GetNotifies(Expression<Func<Notify, bool>> expression)
+
+
+        public IDataResult<Notify> GetNotify(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Notify GetNotify(int id)
+
+
+        public IResult UpdateNotify(Notify notify)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateNotify(Notify notify)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<Notify> INotifyService.GetNotifies()
-        {
-            throw new NotImplementedException();
-        }
+    
     }
 }

@@ -5,16 +5,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Abstract
 {
     public interface ITypeService
     {
-        void AddType(MedicineType medicineType);
-        void DeleteType(MedicineType medicineType);
-        void UpdateType(MedicineType medicineType);
-        List<MedicineType> GetTypes();
-        List<MedicineType> GetTypes(Expression<Func<MedicineType, bool>> expression);
-        MedicineType GetType(int id);
+        IResult AddType(MedicineType medicineType);
+        IResult DeleteType(MedicineType medicineType);
+        IResult UpdateType(MedicineType medicineType);
+        IDataResult<List<MedicineType>> GetTypes(Expression<Func<MedicineType, bool>> expression=null);
+        IDataResult<MedicineType> GetType(int typeId);
     }
 }

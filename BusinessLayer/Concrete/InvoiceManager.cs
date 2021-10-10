@@ -3,48 +3,60 @@ using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class InvoiceManager : IInvoiceService
     {
-        IInvoiceDal _invoiceDal;
+        private readonly IInvoiceDal _invoiceDal;
         public InvoiceManager(IInvoiceDal invoiceDal)
         {
             _invoiceDal = invoiceDal;
         }
-        public void AddInvoice(Invoice invoice)
+        public IResult AddInvoice(Invoice invoice)
         {
-            _invoiceDal.Create(invoice);
+            _invoiceDal.Add(invoice);
+            return new SuccessResult(Messages.InvoiceAdded);
         }
 
-        public void DeleteInvoice(Invoice invoice)
+        public IResult DeleteInvoice(Invoice invoice)
         {
             _invoiceDal.Delete(invoice);
+            return new SuccessResult(Messages.InvoiceDeleted);
         }
 
-        public Invoice GetInvoice(int id)
+        public IDataResult<Invoice> GetInvoice(int id)
         {
-           return _invoiceDal.GetById(id);
+           return new SuccessDataResult<Invoice>( _invoiceDal.Get(x => x.InvoiceId == id),Messages.InvoiceFetched);
         }
 
-        public List<Invoice> GetInvoices()
+
+        public IDataResult<List<Invoice>> GetInvoices(Expression<Func<Invoice, bool>> expression)
         {
-            return _invoiceDal.GetAll();
+            return new SuccessDataResult<List<Invoice>>( _invoiceDal.GetAll(expression),Messages.InvoiceListed);
         }
 
-        public List<Invoice> GetInvoices(Expression<Func<Invoice, bool>> expression)
+        public IDataResult<List<Invoice>> GetInvoicesWithDetails(Expression<Func<Invoice, bool>> expression = null)
         {
-            return _invoiceDal.GetAll(expression);
+            return new SuccessDataResult<List<Invoice>>(_invoiceDal.GetInvoicesWithDetails(expression),
+                Messages.InvoiceListed);
         }
 
-        public void UpdateInvoice(Invoice invoice)
+        public IDataResult<Invoice> GetSingleInvoiceWithDetails(int invoiceId)
+        {
+            return new SuccessDataResult<Invoice>(
+                _invoiceDal.GetSingleInvoiceWithDetails(x => x.InvoiceId == invoiceId), Messages.InvoiceFetched);
+        }
+
+        public IResult UpdateInvoice(Invoice invoice)
         {
             _invoiceDal.Update(invoice);
+            return new SuccessResult(Messages.InvoiceUpdated);
+
         }
     }
 }

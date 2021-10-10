@@ -3,12 +3,12 @@
 
 using EntityLayer.Concrete;
 using System.Collections.Generic;
+using DataAccess.Abstract;
 
 namespace DataAccessLayer.Abstract
 {
-    public interface IMedicineDal: IGenericDal<Medicine>
+    public interface IMedicineDal: IEntityRepository<Medicine>
     {
-        List<Medicine> GetMedicinesWithProperties();
-        Medicine GetMedicinewithProperties(int id);
+       
     }
 }

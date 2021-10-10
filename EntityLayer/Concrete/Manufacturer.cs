@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 
 #nullable disable
 
 namespace EntityLayer.Concrete
 {
-    public partial class Manufacturer
+    public partial class Manufacturer: IEntity
     {
         [Key]
         public int ManufacturerId { get; set; }

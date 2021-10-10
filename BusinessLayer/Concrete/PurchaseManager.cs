@@ -1,54 +1,64 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class PurchaseManager : IPurchaseService
     {
 
-        IPurchaseDal _purchaseDal;
+        private readonly IPurchaseDal _purchaseDal;
 
         public PurchaseManager(IPurchaseDal purchaseDal)
         {
             _purchaseDal = purchaseDal;
         }
 
-        public void AddPurchase(Purchase purchase)
+        public IResult AddPurchase(Purchase purchase)
         {
-             _purchaseDal.Create(purchase);
+             _purchaseDal.Add(purchase);
+             return new SuccessResult(Messages.PurchaseAdded);
         }
 
-        public void DeletePurchase(Purchase purchase)
+        public IResult DeletePurchase(Purchase purchase)
         {
             _purchaseDal.Delete(purchase);
+            return new SuccessResult(Messages.PurchaseDeleted);
         }
 
-        public Purchase GetPurchase(int id)
+        public IDataResult<Purchase> GetPurchase(int id)
         {
-            return _purchaseDal.GetById(id);
+            return new SuccessDataResult<Purchase>( _purchaseDal.Get(x=>x.PurchaseId==id), Messages.PurchaseFetched);
         }
 
-        public List<Purchase> GetPurchases()
+
+        public IDataResult<List<Purchase>> GetPurchases(Expression<Func<Purchase, bool>> expression)
         {
-            return _purchaseDal.GetAll();
+            return new SuccessDataResult<List<Purchase>>(_purchaseDal.GetAll(expression), Messages.PurchaseListed);
         }
 
-        public List<Purchase> GetPurchases(Expression<Func<Purchase, bool>> expression)
+        public IDataResult<List<Purchase>> GetPurchasesWithDetails(Expression<Func<Purchase, bool>> expression = null)
         {
-            return _purchaseDal.GetAll(expression).ToList();
+            //DTO Query
+            throw new NotImplementedException();
         }
 
-        public void UpdatePurchase(Purchase purchase)
+        public IDataResult<Purchase> GetSinglePurchaseWithDetails(int purchaseId)
+        {
+            //DTO Query
+            throw new NotImplementedException();
+        }
+
+        public IResult UpdatePurchase(Purchase purchase)
         {
             _purchaseDal.Update(purchase);
+            return new SuccessResult(Messages.PurchaseUpdated);
         }
     }
 }

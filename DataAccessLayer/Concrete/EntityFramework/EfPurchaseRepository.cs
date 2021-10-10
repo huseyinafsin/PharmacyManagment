@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccessLayer.Abstract;
+using Core.DataAccess.EntityFramework;
 using DataAccessLayer.Concrete;
-using DataAccessLayer.Repository;
+using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace DataAccessLayer.EntityFramework
 {
-    public class EFInvoiceRepository : GenericRepository<Invoice>, IInvoiceDal
+    public class EfPurchaseRepository : EfEntityRepositoryBase<Purchase, PharmacyManagmentContext>, IPurchaseDal
     {
-      
+
+       
     }
 }

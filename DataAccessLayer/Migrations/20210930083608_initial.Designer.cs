@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(PharmacyManagmentContext))]
     [Migration("20210930083608_initial")]
     partial class initial
     {

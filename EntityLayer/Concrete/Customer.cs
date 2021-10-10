@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 
 namespace EntityLayer.Concrete
 {
-    public partial class Customer 
+    public partial class Customer : IEntity
     {
 
         [Key]

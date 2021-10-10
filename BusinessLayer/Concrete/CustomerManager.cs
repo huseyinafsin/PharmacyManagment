@@ -1,58 +1,66 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class CustomerManager : ICustomerService
     {
-        ICustomerDal _customerDal;
+        private readonly ICustomerDal _customerDal;
 
         public CustomerManager(ICustomerDal customerDal)
         {
             _customerDal = customerDal;
         }
 
-        public void AddCustomer(Customer customer)
+        public IResult AddCustomer(Customer customer)
         {
-            _customerDal.Create(customer);
+            _customerDal.Add(customer);
+            return new SuccessResult(Messages.CustomerAdded);
         }
 
-        public void DeleteCustomer(Customer customer)
+        public IResult DeleteCustomer(Customer customer)
         {
             _customerDal.Delete(customer);
+            return new SuccessResult(Messages.CustomerDeleted);
+
         }
 
-        public  List<Customer> GetCustomers()
+
+        public IDataResult<Customer> GetCustomer(int id)
         {
-            return  _customerDal.GetAll();
+            return new SuccessDataResult<Customer>(_customerDal.Get(x => x.CustomerId == id), Messages.CustomerFetched);
         }
 
-        public Customer GetCustomer(int id)
-        {
-            return _customerDal.GetById(id);
-        }
-
-        public void UpdateCustomer(Customer customer)
+        public IResult UpdateCustomer(Customer customer)
         {
             _customerDal.Update(customer);
+            return new SuccessResult(Messages.CustomerUpdated);
+
         }
 
-        public List<Customer> GetCustomers(Expression<Func<Customer, bool>> expression)
+        public IDataResult<List<Customer>> GetCustomers(Expression<Func<Customer, bool>> expression)
         {
-            return _customerDal.GetAll(expression).ToList();
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(expression), Messages.CustomerListed);
         }
 
-        public List<Customer> GetCustomersWithAddress()
+        public IDataResult<List<Customer>> GetCustomersWithDetails(Expression<Func<Customer, bool>> expression = null)
         {
-           return _customerDal.GetCustomersWithAddress();
+            //DTO Query
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetCustomersWithDetails(expression), Messages.CustomerListed);
+        }
+
+        public IDataResult<Customer> GetSingleCustomerWithDetails(int customerId)
+        {
+            //DTO Query
+            return new SuccessDataResult<Customer>(
+                _customerDal.GetSingleCustomerWithDetails(x => x.CustomerId == customerId), Messages.CustomerListed);
         }
     }
 }

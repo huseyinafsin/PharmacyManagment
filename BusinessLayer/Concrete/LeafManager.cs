@@ -1,54 +1,53 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class LeafManager : ILeafService
     {
 
-        ILeafDal _leadDal;
+        private readonly ILeafDal _leadDal;
 
         public LeafManager(ILeafDal ileafDal)
         {
             _leadDal = ileafDal;
         }
 
-        public void AddLeaf(Leaf leaf)
+        public IResult AddLeaf(Leaf leaf)
         {
-             _leadDal.Create(leaf);
+             _leadDal.Add(leaf);
+             return new SuccessResult(Messages.LeafAdded);
         }
 
-        public void DeleteLeaf(Leaf leaf)
+        public IResult DeleteLeaf(Leaf leaf)
         {
             _leadDal.Delete(leaf);
+            return new SuccessResult(Messages.LeafDeleted);
         }
 
-        public Leaf GetLeaf(int id)
+        public IDataResult<Leaf> GetLeaf(int id)
         {
-            return _leadDal.GetById(id);
+            return new SuccessDataResult<Leaf>( _leadDal.Get(x => x.LeafId == id),Messages.LeafFetched);
         }
 
-        public List<Leaf> GetLeaves()
+
+        public IDataResult<List<Leaf>> GetLeaves(Expression<Func<Leaf, bool>> expression)
         {
-            return _leadDal.GetAll();
+            return new SuccessDataResult<List<Leaf>>( _leadDal.GetAll(expression),Messages.LeafListed);
         }
 
-        public List<Leaf> GetLeaves(Expression<Func<Leaf, bool>> expression)
-        {
-            return _leadDal.GetAll(expression);
-        }
 
-        public void UpdateLeaf(Leaf leaf)
+        public IResult UpdateLeaf(Leaf leaf)
         {
             _leadDal.Update(leaf);
+            return new SuccessResult(Messages.LeafUpdated);
         }
     }
 }

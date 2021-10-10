@@ -1,53 +1,55 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
-    public class CategoryManager : Abstract.ICategoryService
+    public class CategoryManager : ICategoryService
     {
         ICategoryDal _categoryDal;
 
         public CategoryManager(ICategoryDal categoryDal)
         {
             _categoryDal = categoryDal;
+
         }
 
-        public void AddCategory(Category category)
+        public IResult AddCategory(Category category)
         {
-            _categoryDal.Create(category);
+            _categoryDal.Add(category);
+            return new SuccessResult(Messages.CategoryAdded);
         }
 
-        public void DeleteCategory(Category category)
+        public IResult DeleteCategory(Category category)
         {
              _categoryDal.Delete(category);
+             return new SuccessResult(Messages.BankAccountDeleted);
         }
 
-        public List<Category> GetCategories()
+  
+        public IDataResult<List<Category>> GetCategories(Expression<Func<Category, bool>> expression)
         {
-            return _categoryDal.GetAll();
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(expression),Messages.CategoryListed);
         }
 
-        public List<Category> GetCategories(Expression<Func<Category, bool>> expression)
+
+        public IDataResult<Category> GetCategory(int id)
         {
-            return _categoryDal.GetAll(expression).ToList();
+            return new SuccessDataResult<Category>( _categoryDal.Get(x => x.CategoryId == id),Messages.CategoryFetched);
         }
 
-        public Category GetCategory(int id)
-        {
-            return _categoryDal.GetById(id);
-        }
 
-        public void UpdateCategory(Category category)
+        public IResult UpdateCategory(Category category)
         {
             _categoryDal.Update(category);
+            return new SuccessResult(Messages.CategoryUpdated);
         }
     }
 }
+

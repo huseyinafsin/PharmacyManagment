@@ -1,67 +1,64 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class MedicineManager : IMedicineService
     {
-        IMedicineDal _medicineDal;
+        private readonly IMedicineDal _medicineDal;
 
         public MedicineManager(IMedicineDal medicineDal)
         {
             _medicineDal = medicineDal;
         }
 
-        public void AddMedicine(Medicine medicine)
+        public IResult AddMedicine(Medicine medicine)
         {
-            _medicineDal.Create(medicine);
+            _medicineDal.Add(medicine);
+            return new SuccessResult(Messages.MedicineAdded);
         }
 
-        public void DeleteMedicine(Medicine medicine)
+        public IResult DeleteMedicine(Medicine medicine)
         {
             _medicineDal.Delete(medicine);
+            return new SuccessResult(Messages.MedicineDeleted);
         }
 
-        public Medicine GetMedicine(int id)
+        public IDataResult<Medicine> GetMedicine(int id)
         {
-            return _medicineDal.GetById(id);
+            return new SuccessDataResult<Medicine>( _medicineDal.Get(x => x.MedicineId == id),Messages.MedicineFetched);
         }
 
-        public List<Medicine> GetMedicines()
+
+        public IDataResult<List<Medicine>> GetMedicines(Expression<Func<Medicine, bool>> expression)
         {
-            return _medicineDal.GetAll();
+            return new SuccessDataResult<List<Medicine>>( _medicineDal.GetAll(expression),Messages.MedicineListed);
         }
 
-        public List<Medicine> GetMedicines(Expression<Func<Medicine, bool>> expression)
+        public IDataResult<List<Medicine>> GetMedicinesWithDetails(Expression<Func<Medicine, bool>> expression = null)
         {
-            return _medicineDal.GetAll(expression);
-        } 
-        public List<Medicine> GetMedicinesWithProperties(Expression<Func<Medicine, bool>> expression)
-        {
-            return _medicineDal.GetMedicinesWithProperties();
+            //DTO Query
+            throw new NotImplementedException();
         }
 
-        public List<Medicine> GetMedicinesWithProperties()
+        public IDataResult<Medicine> GetSingleMedicineWithDetails(int medicineId)
         {
-            return _medicineDal.GetMedicinesWithProperties();
+            //DTO Query
+            throw new NotImplementedException();
         }
 
-        public Medicine GetMedicineWithProperties(int id)
-        {
-            return _medicineDal.GetMedicinewithProperties(id);
-        }
-
-        public void UpdateMedicine(Medicine medicine)
+        public IResult UpdateMedicine(Medicine medicine)
         {
             _medicineDal.Update(medicine);
+            return new SuccessResult(Messages.MedicineUpdated);
+
         }
     }
 }

@@ -5,16 +5,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Abstract
 {
     public interface IUnitService
     {
-        void AddUnit(Unit unit);
-        void DeleteUnit(Unit unit);
-        void UpdateUnit(Unit unit);
-        List<Unit> GetUnites();
-        List<Unit> GetUnites(Expression<Func<Unit, bool>> expression);
-        Unit GetUnit(int id);
+        IResult AddUnit(Unit unit);
+        IResult DeleteUnit(Unit unit);
+        IResult UpdateUnit(Unit unit);
+        IDataResult<List<Unit>> GetUnites(Expression<Func<Unit, bool>> expression=null);
+        IDataResult<Unit> GetUnit(int unitId);
     }
 }

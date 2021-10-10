@@ -1,54 +1,53 @@
 ﻿using BusinessLayer.Abstract;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class AddressManager : IAddressService
     {
-        IAddressDal _addressDal;
+        private readonly IAddressDal _addressDal;
 
         public AddressManager(IAddressDal addressDal)
         {
             _addressDal = addressDal;
         }
 
-        public void AddAddress(Address address)
+        public IResult AddAddress(Address address)
         {
-             _addressDal.Create(address);
+            //Bussiness rules here
+            _addressDal.Add(address);
+            return new SuccessResult(Messages.AddressAdded);
         }
 
-        public void DeleteAddress(Address address)
+        public IResult DeleteAddress(Address address)
         {
-             _addressDal.Delete(address);
+            _addressDal.Delete(address);
+             return new SuccessResult(Messages.AddressDeleted);
         }
 
-        public Address GetAddress(int id)
+        public IDataResult<Address> GetAddress(int id)
         {
-            return _addressDal.GetById(id);
+            return new SuccessDataResult<Address>(_addressDal.Get(x=>x.AddressId==id),Messages.AddressFetched);
         }
 
-        public List<Address> GetAddresses()
+
+        public IDataResult<List<Address>> GetAddresses(Expression<Func<Address, bool>> expression)
         {
-            return  _addressDal.GetAll();
+            return new SuccessDataResult<List<Address>>(_addressDal.GetAll(expression),Messages.AddressListed);
         }
 
-        public List<Address> GetAddresses(Expression<Func<Address, bool>> expression)
-        {
-            return _addressDal.GetAll(expression).ToList();
-        }
 
-        public void UpdateAddress(Address address)
-        {
-             _addressDal.Update(address);
+        public IResult UpdateAddress(Address address)
+        { 
+            _addressDal.Update(address);
+            return new SuccessResult(Messages.AddressUpdated);
         }
     }
 }

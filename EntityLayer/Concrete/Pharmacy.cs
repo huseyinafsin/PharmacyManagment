@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace EntityLayer.Concrete
 {
-    public class Pharmacy
+    public class Pharmacy: IEntity
     {
 
         [Key]

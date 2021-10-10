@@ -1,10 +1,11 @@
 ﻿
 using System;
 using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 
 namespace EntityLayer.Concrete
 {
-    public class Notify
+    public class Notify: IEntity
     {
         [Key]
         public int NotifyId { get; set; }

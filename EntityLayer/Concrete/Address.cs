@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Entities;
 
 
 namespace EntityLayer.Concrete
 {
-    public partial class Address
+    public partial class Address :IEntity
     {
         [Key]
         public int AddressId { get; set; }

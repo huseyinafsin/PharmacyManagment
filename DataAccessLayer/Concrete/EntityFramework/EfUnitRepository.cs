@@ -1,15 +1,16 @@
 ﻿using DataAccessLayer.Abstract;
-using DataAccessLayer.Repository;
+using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DataAccess.EntityFramework;
 
 namespace DataAccessLayer.EntityFramework
 {
-    public class EFUnitRepository :GenericRepository<Unit>, IUnitDal
+    public class EfUnitRepository :EfEntityRepositoryBase<Unit,PharmacyManagmentContext>, IUnitDal
     {
     }
 }

@@ -10,34 +10,50 @@ namespace WebUI.Controllers
 {
     public class CustomerController : Controller
     {
-        ICustomerService _customerService;
+        private readonly ICustomerService _customerService;
+        private readonly IAddressService _addressService;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IAddressService addressService)
         {
             _customerService = customerService;
+            _addressService = addressService;
         }
 
-        public IActionResult CustomerList()
+        public IActionResult Index()
         {
-           
-            var customers = _customerService.GetCustomersWithAddress();
+            var customers = _customerService.GetCustomersWithDetails();
             return View(customers);
         }
+
         [HttpGet]
         public IActionResult CreateCustomer() => View();
         [HttpPost]
         public IActionResult CreateCustomer( Customer customer)
         {
             if (ModelState.IsValid)
-            {
-                    customer.CustomerStatus = true;
+            { 
+                customer.CustomerStatus = true;
+                _addressService.AddAddress(customer.Address);
                 _customerService.AddCustomer(customer);
-                return RedirectToAction(nameof(CustomerList));
             }
-            else
-            {
-                return View(ViewBag.Error="Customer did't inserted");
-            }
+            return RedirectToAction(nameof(Index));
+
         }
+
+        public IActionResult CustomerDetails(int customerId)
+        {
+            var customer = _customerService.GetCustomer(customerId);
+            return View(customer);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCustomer(int customerId)
+        {
+            var customer = _customerService.GetCustomer(customerId);
+            customer.CustomerStatus = false;
+            _customerService.UpdateCustomer(customer);
+            return RedirectToAction("Index","Home");
+        }
+
     }
 }

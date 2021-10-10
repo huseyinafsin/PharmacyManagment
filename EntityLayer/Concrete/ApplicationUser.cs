@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
 
 namespace EntityLayer.Concrete
 {
-    public partial class ApplicationUser : IdentityUser<int>
+    public partial class ApplicationUser : IdentityUser<int>, IEntity
     {
         public override int Id  { get; set; }
         public override string UserName { get; set; }

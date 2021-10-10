@@ -1,10 +1,11 @@
 ﻿
 
 using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 
 namespace EntityLayer.Concrete
 {
-    public class BankAccount
+    public class BankAccount: IEntity
     {
         [Key]
         public int AccoıuntId { get; set; }

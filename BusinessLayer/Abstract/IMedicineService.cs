@@ -5,18 +5,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Abstract
 {
     public interface IMedicineService
     {
-        void AddMedicine(Medicine medicine);
-        void DeleteMedicine(Medicine medicine);
-        void UpdateMedicine(Medicine medicine);
-        List<Medicine> GetMedicines();
-        List<Medicine> GetMedicinesWithProperties();
-        List<Medicine> GetMedicines(Expression<Func<Medicine, bool>> expression);
-        Medicine GetMedicine(int id);
-        Medicine GetMedicineWithProperties(int id);
+        IResult AddMedicine(Medicine medicine);
+        IResult DeleteMedicine(Medicine medicine);
+        IResult UpdateMedicine(Medicine medicine);
+        IDataResult<List<Medicine>> GetMedicinesWithDetails(Expression<Func<Medicine, bool>> expression = null);
+        IDataResult<List<Medicine>> GetMedicines(Expression<Func<Medicine, bool>> expression=null);
+        IDataResult<Medicine> GetMedicine(int medicineId);
+        IDataResult<Medicine> GetSingleMedicineWithDetails(int medicineId);
     }
 }

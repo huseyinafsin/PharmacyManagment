@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.DataAccess.EntityFramework;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete;
-using DataAccessLayer.Repository;
 using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace DataAccessLayer.EntityFramework
 {
-    public class EFTypeRepository : GenericRepository<MedicineType>, ITypeDal
+    public class EfMedicineRepository : EfEntityRepositoryBase<Medicine, PharmacyManagmentContext>, IMedicineDal
     {
-        public void Delete(Func<int, MedicineType> getMedicineType)
-        {
-            throw new NotImplementedException();
-        }
+      
+      
     }
 }

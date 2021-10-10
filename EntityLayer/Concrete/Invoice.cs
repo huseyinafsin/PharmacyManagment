@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Entities;
 
 #nullable disable
 
 namespace EntityLayer.Concrete
 {
-    public partial class Invoice
+    public partial class Invoice: IEntity
     {
         [Key]
         public int InvoiceId { get; set; }

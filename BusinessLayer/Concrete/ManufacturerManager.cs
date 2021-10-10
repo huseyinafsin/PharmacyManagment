@@ -3,55 +3,62 @@ using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class ManufacturerManager : IManufacturerService
     {
-        IManufacturerDal _manufacturerDal;
+        private readonly IManufacturerDal _manufacturerDal;
 
         public ManufacturerManager(IManufacturerDal manufacturerDal)
         {
             _manufacturerDal = manufacturerDal;
         }
 
-        public void AddManufacturer(Manufacturer manufacturer)
+        public IResult AddManufacturer(Manufacturer manufacturer)
         {
-            _manufacturerDal.Create(manufacturer);
+            _manufacturerDal.Add(manufacturer);
+            return new SuccessResult(Messages.ManufacturerAdded);
         }
 
-        public void DeleteManufacturer(Manufacturer manufacturer)
+        public IResult DeleteManufacturer(Manufacturer manufacturer)
         {
             _manufacturerDal.Delete(manufacturer);
+            return new SuccessResult(Messages.ManufacturerDeleted);
         }
 
-        public List<Manufacturer> GetManufacturers()
+        public IDataResult<Manufacturer> GetManufacturer(int manufacturerId)
         {
-           return _manufacturerDal.GetAll();
+            return new SuccessDataResult<Manufacturer>(_manufacturerDal.Get(x => x.ManufacturerId == manufacturerId),
+                Messages.ManufacturerFetched);
         }
 
-        public List<Manufacturer> GetManufacturers(Expression<Func<Manufacturer, bool>> expression)
+
+        public IDataResult<List<Manufacturer>> GetManufacturers(Expression<Func<Manufacturer, bool>> expression)
         {
-            return _manufacturerDal.GetAll(expression);
+            return new SuccessDataResult<List<Manufacturer>>( _manufacturerDal.GetAll(expression),Messages.ManufacturerListed);
         }
 
-        public List<Manufacturer> GetManufacturersWithProperties()
+        public IDataResult<List<Manufacturer>> GetManufacturersWithDetails(Expression<Func<Manufacturer, bool>> expression = null)
         {
-            return _manufacturerDal.GetManufacturersWithProperties();
+            //DTO Query
+            throw new NotImplementedException();
         }
 
-        public Manufacturer GetManufacturerWithPropeties(int id)
+        public IDataResult<Manufacturer> GetSingleManufacturerWithDetails(int manufacturerId)
         {
-            return _manufacturerDal.GetManufacturerWithProperties(id);
+            //DTO Query
+            throw new NotImplementedException();
         }
 
-        public void UpdateManufacturer(Manufacturer manufacturer)
+        public IResult UpdateManufacturer(Manufacturer manufacturer)
         {
-             _manufacturerDal.Update(manufacturer);
+            _manufacturerDal.Update(manufacturer);
+            return new SuccessResult(Messages.ManufacturerUpdated);
         }
     }
 }

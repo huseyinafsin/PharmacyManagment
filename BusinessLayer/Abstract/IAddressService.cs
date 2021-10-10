@@ -1,20 +1,18 @@
 ﻿using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Abstract
 {
     public interface IAddressService
     {
-        void AddAddress(Address address);
-        void DeleteAddress(Address address);
-        void UpdateAddress(Address address);
-        List<Address> GetAddresses();
-        List<Address> GetAddresses(Expression<Func<Address, bool>> expression);
-        Address GetAddress(int id);
+        IResult AddAddress(Address address);
+        IResult DeleteAddress(Address address);
+        IResult UpdateAddress(Address address);
+        IDataResult<List<Address>> GetAddresses(Expression<Func<Address, bool>> expression=null);
+        IDataResult<Address> GetAddress(int addressId);
     }
 } 

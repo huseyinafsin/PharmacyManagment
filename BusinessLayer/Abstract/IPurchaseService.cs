@@ -5,16 +5,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Abstract
 {
     public interface IPurchaseService
     {
-        void AddPurchase(Purchase purchase);
-        void DeletePurchase(Purchase purchase);
-        void UpdatePurchase(Purchase purchase);
-        List<Purchase> GetPurchases();
-        List<Purchase> GetPurchases(Expression<Func<Purchase, bool>> expression);
-        Purchase GetPurchase(int id);
+        IResult AddPurchase(Purchase purchase);
+        IResult DeletePurchase(Purchase purchase);
+        IResult UpdatePurchase(Purchase purchase);
+        IDataResult<List<Purchase>> GetPurchasesWithDetails(Expression<Func<Purchase, bool>> expression = null);
+        IDataResult<List<Purchase>> GetPurchases(Expression<Func<Purchase, bool>> expression=null);
+        IDataResult<Purchase> GetPurchase(int purchaseId);
+        IDataResult<Purchase> GetSinglePurchaseWithDetails(int purchaseId);
     }
 }

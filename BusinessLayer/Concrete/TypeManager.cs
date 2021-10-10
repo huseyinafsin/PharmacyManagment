@@ -3,53 +3,52 @@ using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using BusinessLayer.Constant;
+using Core.Entities;
+using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
 {
     public class TypeManager : ITypeService
     {
 
-        ITypeDal _typeDal;
+        private readonly ITypeDal _typeDal;
 
         public TypeManager(ITypeDal typeDal)
         {
             _typeDal = typeDal;
         }
 
-        public void AddType(MedicineType type)
+        public IResult AddType(MedicineType type)
         {
-            _typeDal.Create(type);
+            _typeDal.Add(type);
+            return new SuccessResult(Messages.TypeAdded);
         }
 
-        public void DeleteType(MedicineType type)
+        public IResult DeleteType(MedicineType type)
         {
             _typeDal.Delete(type);
+            return new SuccessResult(Messages.TypeDeleted);
         }
 
-        public MedicineType GetType(int id)
+
+        public IDataResult<MedicineType> GetType(int id)
         {
-            return _typeDal.GetById(id);
-                
+            return new SuccessDataResult<MedicineType>( _typeDal.Get(x => x.TypeId == id), Messages.TypeFetched);
         }
 
-        public List<MedicineType> GetTypes()
+
+        public IDataResult<List<MedicineType>> GetTypes(Expression<Func<MedicineType, bool>> expression)
         {
-            return _typeDal.GetAll();
-            
+            return new SuccessDataResult<List<MedicineType>>( _typeDal.GetAll(expression), Messages.TypeListed);
         }
 
-        public List<MedicineType> GetTypes(Expression<Func<MedicineType, bool>> expression)
-        {
-            return _typeDal.GetAll(expression);
-        }
 
-        public void UpdateType(MedicineType medicineType)
+        public IResult UpdateType(MedicineType medicineType)
         {
             _typeDal.Update(medicineType);
+            return new SuccessResult(Messages.TypeUpdated);
         }
 
        
