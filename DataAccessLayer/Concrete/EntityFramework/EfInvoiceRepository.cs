@@ -4,12 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using Core.DataAccess.EntityFramework;
 using DataAccessLayer.Abstract;
-using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace DataAccessLayer.EntityFramework
+namespace DataAccessLayer.Concrete.EntityFramework
 {
     public class EfInvoiceRepository : EfEntityRepositoryBase<Invoice, PharmacyManagmentContext>, IInvoiceDal
     {

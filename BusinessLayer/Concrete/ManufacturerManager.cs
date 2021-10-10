@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using BusinessLayer.Constant;
-using Core.Entities;
 using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
@@ -46,13 +45,15 @@ namespace BusinessLayer.Concrete
         public IDataResult<List<Manufacturer>> GetManufacturersWithDetails(Expression<Func<Manufacturer, bool>> expression = null)
         {
             //DTO Query
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Manufacturer>>(_manufacturerDal.GetManufacturersWithDetails(expression),
+                Messages.ManufacturerListed);
         }
 
         public IDataResult<Manufacturer> GetSingleManufacturerWithDetails(int manufacturerId)
         {
             //DTO Query
-            throw new NotImplementedException();
+            return new SuccessDataResult<Manufacturer>(
+                _manufacturerDal.GetSingleManufacturerWithDetails(x => x.ManufacturerId == manufacturerId));
         }
 
         public IResult UpdateManufacturer(Manufacturer manufacturer)

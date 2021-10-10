@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using BusinessLayer.Constant;
-using Core.Entities;
 using Core.Utilities.Result;
 
 namespace BusinessLayer.Concrete
@@ -40,7 +39,8 @@ namespace BusinessLayer.Concrete
         public IDataResult<List<Pharmacy>> GetPharmaciesWithDetails(Expression<Func<Pharmacy, bool>> expression = null)
         {
             //DTO Query
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<Pharmacy>>(_pharmacyDal.GetPharmaciesWithDetails(expression),
+                Messages.PharmacyListed);
         }
 
         public IDataResult<Pharmacy> GetPharmacy(int id)
@@ -51,7 +51,8 @@ namespace BusinessLayer.Concrete
         public IDataResult<Pharmacy> GetSinglePharmacyWithDetails(int pharmacyId)
         {
             //DTO Query
-            throw new NotImplementedException();
+            return new SuccessDataResult<Pharmacy>(
+                _pharmacyDal.GetSinglePharmacyWithDetails(x => x.PharmacyId == pharmacyId), Messages.PharmacyFetched);
         }
 
         public IResult UpdatePharmacy(Pharmacy pharmacy)
