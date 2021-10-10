@@ -32,7 +32,6 @@ namespace BusinessLayer.Concrete
 
         }
 
-
         public IDataResult<Customer> GetCustomer(int id)
         {
             return new SuccessDataResult<Customer>(_customerDal.Get(x => x.CustomerId == id), Messages.CustomerFetched);
